@@ -16,18 +16,21 @@ export interface messageType {
     pengirim_nama: string,
     anggota: Array<GroupParticipant>,
     isAdmin: boolean,
+    messageInstance : proto.IWebMessageInfo,
+    kontak : string[],
+    quoted? : proto.IMessage | null | undefined,
+    message_type : msg_type
 }
-
+type msg_type = "imageMessage" | "videoMessage"
 export default async function MiddlewareController(message: {
     messages: proto.IWebMessageInfo[];
     type: MessageUpsertType;
 }, socket: WASocket) {
-
-    const isGroup = message.messages[0].key.participant != null
-    const pesan = message.messages[0].message?.conversation
+    const isGroup = message.messages?.[0].key?.participant != null
+    const pesan = message.messages[0].message?.conversation || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
+    const quoted = message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage
     if (!(pesan?.at(0) == getOptions().prefix as string)) return
-    console.log(message.messages)
-
+    const msgType = Object.keys(message?.messages[0].message as object)[0]
     const sending: messageType = {
 
         key: message.messages[0].key.id as string,
@@ -38,7 +41,21 @@ export default async function MiddlewareController(message: {
         isGroup: isGroup,
         anggota: [],
         pengirim_nama: message.messages[0].pushName as string,
-        isAdmin: false
+        isAdmin: false,
+        messageInstance : message.messages[0],
+        quoted,
+        kontak : [],
+        message_type : msgType as unknown as msg_type
+    }
+    if(quoted?.contactMessage?.vcard != null) {
+        const contact : string[] = quoted?.contactMessage?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
+        sending.kontak?.push(contact[0])
+    }
+    if(quoted?.contactsArrayMessage != null) {
+        quoted?.contactsArrayMessage.contacts?.forEach(el => {
+            const contact : string[] = el?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
+            sending.kontak?.push(contact[0])
+        })
     }
     if (isGroup) {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
@@ -48,7 +65,7 @@ export default async function MiddlewareController(message: {
         types: RegExp,
         default: any
     }) => {
-        if (!el.types.test(pesan)) return
+        if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) return
         try {
 
             await el.default(socket, sending)

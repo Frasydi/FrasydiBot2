@@ -1,3 +1,5 @@
 node_modules
 auth_info_baileys
 baileys_store.json
+.env
+media

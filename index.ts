@@ -3,6 +3,8 @@ import { DisconnectReason } from "@adiwajshing/baileys/lib/Types"
 import { Browsers, useMultiFileAuthState } from "@adiwajshing/baileys/lib/Utils"
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
+import dotenv from "dotenv"
+dotenv.config()
 const store = makeInMemoryStore({ })
 store.readFromFile('./baileys_store.json')
 setInterval(() => {
@@ -35,7 +37,7 @@ async function connectToWhatsApp () {
         }
     })
     sock.ev.on('messages.upsert', async(m) => {
-        console.log(m)
+        console.log(JSON.stringify(m, null, 2))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         })
