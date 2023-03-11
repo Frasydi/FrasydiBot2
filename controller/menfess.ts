@@ -10,7 +10,7 @@ export const bantuan = [
 ]
 export const isGroup = false
 export const isAdmin = false
-export default async function Hello(socket: WASocket, {
+export default async function Menfess(socket: WASocket, {
     key,
     fromMe,
     pesan,

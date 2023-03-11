@@ -1,3 +1,4 @@
+import { proto } from '@adiwajshing/baileys/WAProto';
 import  childprocess  from 'child_process';
 import { WASocket, downloadMediaMessage } from '@adiwajshing/baileys';
 import { messageType } from '../controller_middleware';
@@ -7,6 +8,7 @@ import { getOptions } from '../util/option';
 import saveMedia from '../util/saveMedia';
 import {v4 as uuidv4} from 'uuid';
 import * as fs from 'fs'
+import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
 export const types = /sticker/i
 export const nama = "Sticker"
 export const kategori = "Tools"
@@ -15,7 +17,7 @@ export const bantuan = [
 ]
 export const isGroup = false
 export const isAdmin = false
-export default async function Hello(socket: WASocket, {
+export default async function Sticker(socket: WASocket, {
     key,
     fromMe,
     pesan,
@@ -24,11 +26,20 @@ export default async function Hello(socket: WASocket, {
     pengirim,
     isGroup,
     messageInstance,
-    message_type
+    message_type,
+    quoted_type,
+    quoted
 }: messageType) {
-    if(message_type != "imageMessage") return await socket.sendMessage(room, {text : "Bukan Gambar"})
-    console.log("LOL")
-    const buffer = await downloadMediaMessage(messageInstance, "buffer", {});
+    if(quoted_type != null) {
+        if(quoted_type != "imageMessage") {
+            return await socket.sendMessage(room, {text : "Bukan Gambar"})
+        }
+    } else {
+        if(message_type != "imageMessage")  return await socket.sendMessage(room, {text : "Bukan Gambar"})
+    }
+    console.log(JSON.stringify(quoted))
+    const messageTemp:proto.IWebMessageInfo = quoted != null ?  convertQuoted2MsgInfo(messageInstance) : messageInstance
+    const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
     const nama = uuidv4()
     const file = nama+"."+messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1)
     if(!fs.existsSync("media/temp")) {
@@ -40,6 +51,7 @@ export default async function Hello(socket: WASocket, {
     }catch(err) {
        return await socket.sendMessage(room, {text : "Ada masalah"})
     }
+    
     try {
         await socket.sendMessage(room, {sticker : {url : "media/temp/"+nama+".webp"}})
     }catch(err) {

@@ -6,8 +6,8 @@ const ControllerFunctions = Files.map(el => {
     const file = require("./controller/"+el)
     if(!Object.keys(kategoris).includes(file.kategori)) {
         kategoris[file.kategori] = []
-        kategoris[file.kategori].push(`${file.nama} ${file.isGroup ? "(Group Only)" : ""} ${file.isAdmin ? "(Admin Group Only)" : ""} : ${file.bantuan.join(", ")}`)
     }
+    kategoris[file.kategori].push(`${file.nama} ${file.isGroup ? "(Group Only)" : ""} ${file.isAdmin ? "(Admin Group Only)" : ""} : ${file.bantuan.join(", ")}`)
     return file
 })
 

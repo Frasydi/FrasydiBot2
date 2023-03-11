@@ -19,7 +19,7 @@ const limiter = () => {
 }
 
 
-export default async function Hello(socket: WASocket, {
+export default async function Gambar(socket: WASocket, {
     key,
     fromMe,
     pesan,

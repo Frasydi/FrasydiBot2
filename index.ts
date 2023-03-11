@@ -37,7 +37,6 @@ async function connectToWhatsApp () {
         }
     })
     sock.ev.on('messages.upsert', async(m) => {
-        console.log(JSON.stringify(m, null, 2))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         })
