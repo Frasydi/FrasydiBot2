@@ -51,6 +51,7 @@ export default async function AI(socket: WASocket, {
             quoted : messageInstance
         })
     }catch(err:any) {
+        console.log(err)
         isLimit = false
 
         if(err.response.data == "Too many requests") {

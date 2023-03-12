@@ -66,16 +66,17 @@ export default async function MiddlewareController(message: {
         sending.isAdmin = sending.anggota.filter(el => el.id == sending.pengirim)[0].admin == "admin"
     }
     for(let el of ControllerFunctions) {
-        console.log(el)
+        console.log(el.types)
         if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) continue;
-        try {
+        
 
-            await el.default(socket, sending)
-            break
-        } catch (err) {
+        el.default(socket, sending).catch((err:any) => {
             console.log(err)
-            
-        }
+            console.log("Ada Error")
+            socket.sendMessage(sending.room, {text : "Ada Error"})
+        })
+        break
+        
     }
     
 }

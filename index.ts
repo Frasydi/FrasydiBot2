@@ -19,7 +19,6 @@ async function connectToWhatsApp () {
     const sock = makeWASocket({
         printQRInTerminal: true,
         browser: Browsers.macOS('Desktop'),
-        syncFullHistory: true,
         auth : state
     })
     store.bind(sock.ev)
@@ -36,7 +35,9 @@ async function connectToWhatsApp () {
             console.log('opened connection')
         }
     })
-    sock.ev.on('messages.upsert', async(m) => {
+    sock.ev.on('messages.upsert', (m) => {
+        console.log(m.type)
+        if(m.type == "append") return
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         })
