@@ -1,3 +1,4 @@
+import { proto } from '@adiwajshing/baileys/WAProto';
 import makeWASocket, {makeInMemoryStore} from "@adiwajshing/baileys"
 import { DisconnectReason } from "@adiwajshing/baileys/lib/Types"
 import { Browsers, useMultiFileAuthState } from "@adiwajshing/baileys/lib/Utils"
@@ -5,7 +6,9 @@ import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
 dotenv.config()
-const store = makeInMemoryStore({ })
+const store = makeInMemoryStore({ 
+   
+})
 store.readFromFile('./baileys_store.json')
 setInterval(() => {
     store.writeToFile('./baileys_store.json')
@@ -19,9 +22,17 @@ async function connectToWhatsApp () {
     const sock = makeWASocket({
         printQRInTerminal: true,
         browser: Browsers.macOS('Desktop'),
-        auth : state
+        auth : state,
+        getMessage : async(key) => {
+            console.log(key)
+            const message = await store.loadMessage(key.remoteJid as string, key.id as string)
+            return message as proto.IMessage | undefined
+        }
     })
     store.bind(sock.ev)
+    
+    
+   
     sock.ev.on("creds.update", saveCreds)
     sock.ev.on('connection.update', (update) => {
         const { connection, lastDisconnect } : any = update
@@ -35,8 +46,12 @@ async function connectToWhatsApp () {
             console.log('opened connection')
         }
     })
+    
+    sock.ev.on("messages.delete",(m) => {
+        console.log(m)
+    })
     sock.ev.on('messages.upsert', (m) => {
-        console.log(m.type)
+        
         if(m.type == "append") return
         MiddlewareController(m, sock).catch(err => {
             console.log(err)

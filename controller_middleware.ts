@@ -53,12 +53,16 @@ export default async function MiddlewareController(message: {
     }
     if(quoted?.contactMessage?.vcard != null) {
         const contact : string[] = quoted?.contactMessage?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
-        sending.kontak?.push(contact[0])
+        console.log(contact)
+        sending.kontak?.push(contact?.[0])
     }
     if(quoted?.contactsArrayMessage != null) {
         quoted?.contactsArrayMessage.contacts?.forEach(el => {
+            console.log(el.vcard)
             const contact : string[] = el?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
-            sending.kontak?.push(contact[0])
+            console.log(contact)
+            if(contact == null) return
+            sending.kontak?.push(contact?.[0])
         })
     }
     if (isGroup) {

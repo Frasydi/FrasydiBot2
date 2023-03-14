@@ -4,10 +4,10 @@ import { getOptions } from "../util/option";
 import { execSync, exec, spawn } from "child_process";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-export const types = /yt/i;
-export const nama = "Youtube";
+export const types = /vdl/i;
+export const nama = "Video Downloader";
 export const kategori = "Tools";
-export const bantuan = [getOptions()?.prefix + "yt [link]"];
+export const bantuan = [getOptions()?.prefix + "vdl [link] [audio/video]", "vdl [link] [audio/video] [username] [password]" ];
 export const isGroup = false;
 export const isAdmin = false;
 export default async function Youtube(
@@ -36,16 +36,16 @@ export default async function Youtube(
     if(!fs.existsSync("media/temp")) {
       fs.mkdirSync("media/temp")
     }
+   
     await socket.sendPresenceUpdate('recording', room) 
     const result = execSync(
-      `yt-dlp -f 'worst[ext=mp4]' --max-filesize 75971520   -o "media/temp/${nama}.mp4" ${pesan.at(0)}`
+      `yt-dlp -f 'worst[ext=mp4]' ${pesan[2] != null ? `--username ${pesan[2]}` : ``} ${pesan[3] != null ? `--password ${pesan[3]} --no-geo-bypass` : ``} --max-filesize 75971520   -o "media/temp/${nama}.mp4" ${pesan.at(0)}`
     ).toString();
 
     console.log(result);
     
     if (isVideo) {
-      const stream = fs.createReadStream(`media/temp/${nama}.mp4` as string);
-      await socket.sendMessage(room, { video: { stream: stream } });
+      await socket.sendMessage(room, { video: { url: `media/temp/${nama}.mp4` } });
     } else {
       // const tes  = execSync(`ffmpeg -i media/temp/${nama}.mp4 -vn -acodec libmp3lame -qscale:a 2 media/temp/${nama}.mp3`).toString();
       // console.log(tes)
@@ -55,7 +55,7 @@ export default async function Youtube(
     }
 
   } catch (err) {
-    
+    console.log(err)
     return await socket.sendMessage(room, { text: "Terdapat Masalah" });
   }
 }
