@@ -1,7 +1,7 @@
 cara install 
 
 clone repo ini
-git clone https://github.com/Frasydi/FrasydiBot2
+`git clone https://github.com/Frasydi/FrasydiBot2`
 
 install module
 yarn atau npm install
