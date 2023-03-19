@@ -15,7 +15,6 @@ setInterval(() => {
 }, 10_000)
 
 
-
 async function connectToWhatsApp () {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
 
