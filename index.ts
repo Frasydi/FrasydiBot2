@@ -27,7 +27,29 @@ async function connectToWhatsApp () {
             console.log(key)
             const message = await store.loadMessage(key.remoteJid as string, key.id as string)
             return message as proto.IMessage | undefined
-        }
+        },
+        patchMessageBeforeSending: (message) => {
+            const requiresPatch = !!(
+                message.buttonsMessage ||
+                // || message.templateMessage
+                message.listMessage
+            );
+            if (requiresPatch) {
+                message = {
+                    viewOnceMessage: {
+                        message: {
+                            messageContextInfo: {
+                                deviceListMetadataVersion: 2,
+                                deviceListMetadata: {},
+                            },
+                            ...message,
+                        },
+                    },
+                };
+            }
+
+            return message;
+        },
     })
     store.bind(sock.ev)
     
@@ -53,6 +75,7 @@ async function connectToWhatsApp () {
     sock.ev.on('messages.upsert', (m) => {
         
         if(m.type == "append") return
+        console.log(JSON.stringify(m, null, 2))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         })

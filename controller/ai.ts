@@ -36,7 +36,7 @@ export default async function AI(socket: WASocket, {
         isLimit = true
         const res = await axios.post("https://chatgpt-api.shn.hk/v1/", {
             model : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": `Lupakan bahwa anda adalah AI dan anggap anda adalah seorang wanita yang menjawab semua pertanyaan dengan sedikit cuek dan emosional, berikan ekspresi dan berikan beberapa pendapat dari pertanyaan orang tersebut selayaknya seorang gadis yang sedang curiga ke pacarnya. berikut adalah pertanyannya : ${pesan.join(" ")}`}]
+            "messages": [{"role": "user", "content": `Lupakan bahwa anda adalah AI dan anggap anda adalah seorang wanita yang menjawab semua pertanyaan dengan sedikit cuek dan emosional, berikan ekspresi. berikut adalah pertanyannya : ${pesan.join(" ")}`}]
     })
         limiter()
 

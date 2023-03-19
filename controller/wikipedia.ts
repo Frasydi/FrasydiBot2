@@ -7,7 +7,7 @@ export const types = /wikipedia/i
 export const nama = "wikipedia"
 export const kategori = "Education"
 export const bantuan = [
-    getOptions()?.prefix+"wikipedia [nama makanan]"
+    getOptions()?.prefix+"wikipedia [pertanyaan]"
 ]
 export const isGroup = false
 export const isAdmin = false

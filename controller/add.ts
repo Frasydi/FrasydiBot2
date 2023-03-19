@@ -5,7 +5,7 @@ import { getOptions } from '../util/option';
 import getMentions from "../util/getMentions"
 export const types = /Add/i
 export const nama = "Add"
-export const kategori = "Fun"
+export const kategori = "Group"
 export const bantuan = [
     getOptions()?.prefix+"Add [kontak]"
 ]
