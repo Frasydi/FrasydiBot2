@@ -5,6 +5,7 @@ import { Browsers, useMultiFileAuthState } from "@adiwajshing/baileys/lib/Utils"
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
+import * as fs from "fs"
 dotenv.config()
 const store = makeInMemoryStore({ 
    
@@ -13,7 +14,9 @@ store.readFromFile('./baileys_store.json')
 setInterval(() => {
     store.writeToFile('./baileys_store.json')
 }, 10_000)
-
+if(!fs.existsSync("media")) {
+    fs.mkdirSync("media")
+}
 
 async function connectToWhatsApp () {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
