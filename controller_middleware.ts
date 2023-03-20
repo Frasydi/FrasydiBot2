@@ -28,7 +28,7 @@ export default async function MiddlewareController(message: {
     type: MessageUpsertType;
 }, socket: WASocket) {
     const isGroup = message.messages?.[0].key?.participant != null
-    const pesan = message.messages[0].message?.conversation || message.messages[0].message?.buttonsResponseMessage?.selectedButtonId || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
+    const pesan = message.messages[0].message?.conversation || message.messages[0].message?.listResponseMessage?.singleSelectReply?.selectedRowId|| message.messages[0].message?.buttonsResponseMessage?.selectedButtonId || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
     const quoted = message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage
     if (!(pesan?.at(0) == getOptions().prefix as string)) return
     const msgType = Object.keys(message?.messages[0].message as object)[0] 
@@ -76,8 +76,8 @@ export default async function MiddlewareController(message: {
 
         el.default(socket, sending).catch((err:any) => {
             console.log(err)
-            console.log("Ada Error")
-            socket.sendMessage(sending.room, {text : "Ada Error"})
+
+            socket.sendMessage(sending.room, {text : typeof err == "string" ? err: "Ada Error"})
         })
         break
         

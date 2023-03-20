@@ -1,3 +1,10 @@
 {
-    "prefix" : "/"
+  "prefix": "/",
+  "shalat": [
+    {
+      "room": "120363026138625122@g.us",
+      "status": true,
+      "kode": 930
+    }
+  ]
 }

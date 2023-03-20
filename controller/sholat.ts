@@ -2,7 +2,7 @@ import { WASocket } from '@adiwajshing/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 import axios from "axios"
-export const types = /sholat/i
+export const types = /^sholat$/i
 export const nama = "Sholat"
 export const kategori = "Education"
 export const bantuan = [

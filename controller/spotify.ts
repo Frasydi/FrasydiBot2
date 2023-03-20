@@ -1,3 +1,4 @@
+import { proto } from "@adiwajshing/baileys/WAProto";
 import { execSync } from "child_process";
 import { WASocket } from "@adiwajshing/baileys";
 import { messageType } from "../controller_middleware";
@@ -61,34 +62,45 @@ export default async function spotify(
         limit: 5,
         offset: offset,
       });
-      const items = search.body.tracks?.items
-        .map(
-          (el, ind) =>
-            `${offset + (ind + 1)}. Judul Lagu : ${el.name}\nArtis : ${
-              el.artists[0].name
-            }\nAlbum : ${el.album.name}\nId : ${el.id}\n`
-        )
-        .join("\n");
-      const buttons: buttons[] = [];
+
+      const list: proto.Message.ListMessage.ISection[] = [
+        {
+          title: "Aksi",
+          rows: [],
+        },
+        {
+          title: "Daftar",
+          rows: [],
+        },
+      ];
+      search.body.tracks?.items.forEach((el, ind) => {
+        list[1].rows?.push({
+          rowId: getOptions()?.prefix +"spotify download " + src + "|" + (offset + (ind + 1)),
+          title: `${el.name}`,
+          description : `Album : ${el.album.name}, Artis : ${el.artists[0].name}`
+        });
+      });
+
       if (offset > 0) {
-        buttons.push({
-          buttonId: "/spotify search " + src + "|" + (offset - 5),
-          buttonText: { displayText: "Prev" },
-          type: 1,
+        list?.[0]?.rows?.push({
+          rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset - 5),
+          title: "Prev",
         });
       }
-      buttons.push({
-        buttonId: "/spotify search " + src + "|" + (offset + 5),
-        buttonText: { displayText: "Next" },
-        type: 1,
+      list?.[0]?.rows?.push({
+        rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset + 5),
+        title: "Next",
       });
+      console.log(JSON.stringify(list, null, 2));
       return await socket.sendMessage(room, {
-        text: "Daftar Lagu dari hasil pencarian *" + src + "*\n\n" + items,
+        text: "Daftar Lagu dari hasil pencarian *" + src+"* halaman ke "+(Math.floor(offset/5)+1),
         footer: "Frasydi Bot",
-        buttons: buttons,
+        title: "Daftar",
+        buttonText: "List",
+        sections: list,
       });
     }
-    await socket.sendPresenceUpdate("recording", room)
+    await socket.sendPresenceUpdate("recording", room);
     let src = pesan.slice(1).join(" ");
 
     let ind = 0;
@@ -98,8 +110,8 @@ export default async function spotify(
     src = temp.at(0) as string;
     if (!/[0-9]+/i.test(temp.at(1) as string))
       throw "Untuk index harus menggunakan angka";
-    ind = parseInt(temp.at(1) as string)-1;
-    if(ind < 0) throw "Index tidak boleh kurang atau sama dengan 0"
+    ind = parseInt(temp.at(1) as string) - 1;
+    if (ind < 0) throw "Index tidak boleh kurang atau sama dengan 0";
     const search = await spotifyApi.searchTracks(src, {
       limit: 5,
       offset: ind,
@@ -122,7 +134,7 @@ export default async function spotify(
       },
       { quoted: messageInstance }
     );
-      removeDir(`media/temp/${dirName}/`)
+    removeDir(`media/temp/${dirName}/`);
   } catch (err) {
     console.log(err);
     await socket.sendMessage(room, {
