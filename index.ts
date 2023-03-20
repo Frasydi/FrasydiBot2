@@ -18,7 +18,9 @@ setInterval(() => {
 if(!fs.existsSync("media")) {
     fs.mkdirSync("media")
 }
-
+if(!fs.existsSync("option.json")) {
+    fs.writeFileSync("option.json", JSON.stringify({prefix : "/", sholat : []}))
+}
 async function connectToWhatsApp () {
     const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
 
