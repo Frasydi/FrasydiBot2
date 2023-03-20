@@ -7,6 +7,7 @@ import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
 import * as fs from "fs"
 import AzanNotification from './util/azanNotification';
+import AlarmNotifications from './util/alarmNotifications';
 dotenv.config()
 const store = makeInMemoryStore({ 
    
@@ -72,6 +73,7 @@ async function connectToWhatsApp () {
         } else if(connection === 'open') {
             console.log('opened connection')
             AzanNotification(sock)
+            AlarmNotifications(sock)
         }
     })
     

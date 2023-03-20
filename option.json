@@ -13,5 +13,12 @@
       "status": true,
       "kode": 930
     }
-  ]
+  ],
+  "alarm": {
+    "628819873445@s.whatsapp.net": {
+      "pesan": "tes",
+      "timeZone": 8,
+      "waktu": 1682034120000
+    }
+  }
 }

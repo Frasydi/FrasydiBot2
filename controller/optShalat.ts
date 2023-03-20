@@ -11,7 +11,7 @@ export const bantuan = [
 export const isGroup = true
 export const isAdmin = true
 
-const timeZoneMap = {
+export const timeZoneMap = {
     "WIB" : 7,
     "WIT" : 9,
     "WITA" : 8
@@ -24,9 +24,11 @@ export default async function optShalat(socket: WASocket, {
     pengirim_nama,
     pengirim,
     isGroup,
+    isAdmin
 }: messageType) {
-    if(!isGroup) throw "Hanya bisa di grub"
-    if(!isAdmin) throw "Hanya bisa dilakukan oleh admin"
+    if(isGroup) {
+        if(!isAdmin) throw "Hanya bisa dilakukan oleh admin"
+    }
     if(pesan.length < 3) throw "Harus ada opsi true false, kode wilayah, dan time zone (WIB|WITA|WIT)"
     if(!(pesan[0] == "true" || pesan[0] == "false")) throw "Hanya berupa true atau false"
     if(!/[0-9]+/i.test(pesan[1])) throw "Harus berupa kode wilayah." + `Baca selengkapnya menggunakan kommand ${getOptions().previx}sholat`

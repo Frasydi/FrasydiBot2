@@ -1,6 +1,7 @@
 import * as fs from "fs"
 export function getOptions() {
-    const option = require("../option.json")
+    
+    const option = JSON.parse(fs.readFileSync("option.json", "utf-8"))
     return option
 }
 

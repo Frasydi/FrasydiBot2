@@ -57,7 +57,7 @@ function handleTime(socket: WASocket, today: Date, location: Map<number, any>) {
   });
 }
 
-function timeZoneConvert(timeNow : Date, tzone : number) {
+export function timeZoneConvert(timeNow : Date, tzone : number) {
     const totalOffset = 0 -  (-1 * (60*tzone));
     const targetTime = timeNow.getTime() + (totalOffset * 60 * 1000);
     const date =  new Date(targetTime);
