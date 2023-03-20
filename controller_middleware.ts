@@ -5,6 +5,7 @@ import { WASocket } from '@adiwajshing/baileys';
 import ControllerFunctions from "./controller_add";
 import { getOptions } from "./util/option";
 import { getGroupMetadata } from "./util/group";
+import { getSuggesSpell } from "./util/spellChecker";
 
 export interface messageType {
     key: string, 
@@ -70,17 +71,15 @@ export default async function MiddlewareController(message: {
         sending.isAdmin = sending.anggota.filter(el => el.id == sending.pengirim)[0].admin == "admin"
     }
     for(let el of ControllerFunctions) {
-        console.log(el.types)
         if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) continue;
-        
-
         el.default(socket, sending).catch((err:any) => {
             console.log(err)
-
             socket.sendMessage(sending.room, {text : typeof err == "string" ? err: "Ada Error"})
         })
-        break
-        
+        return
     }
-    
+    const mispelled = getSuggesSpell(pesan.split(" ")[0].split("/").at(-1) as string)
+    if(!mispelled.misspelled) return
+    const sugg = mispelled.suggestions.map((el,ind) => `${ind+1}. ${el}`).join("\n")
+    await socket.sendMessage(sending.room, {text : "Mungkin maksud Anda adalah : \n\n"+sugg})
 }
