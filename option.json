@@ -3,6 +3,7 @@
   "shalat": [
     {
       "room": "120363026138625122@g.us",
+      "timezone": 8,
       "status": true,
       "kode": 930
     }

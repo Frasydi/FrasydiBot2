@@ -364,6 +364,11 @@ cookiejar@^2.1.2:
   resolved "https://registry.yarnpkg.com/cookiejar/-/cookiejar-2.1.4.tgz#ee669c1fea2cf42dc31585469d193fef0d65771b"
   integrity sha512-LDx6oHrK+PhzLKJU9j5S7/Y3jM/mUHvD/DeI1WQmJn652iPC5Y4TBzC9l+5OMOXlyTTA+SmVUPm0HQUwpD5Jqw==
 
+countries-and-timezones@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/countries-and-timezones/-/countries-and-timezones-3.4.1.tgz#0ec2540f57e42f0f740eb2acaede786043347fe1"
+  integrity sha512-INeHGCony4XUUR8iGL/lmt9s1Oi+n+gFHeJAMfbV5hJfYeDOB8JG1oxz5xFQu5oBZoRCJe/87k1Vzue9DoIauA==
+
 create-require@^1.1.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"

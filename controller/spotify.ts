@@ -7,6 +7,7 @@ import SpotifyWebApi from "spotify-web-api-node";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 import removeDir from "../util/rmdir";
+import convertMsToTime from "../util/convertMsToTime";
 export const types = /spotify/i;
 export const nama = "spotify";
 export const kategori = "Fun";
@@ -92,6 +93,7 @@ export default async function spotify(
         title: "Next",
       });
       console.log(JSON.stringify(list, null, 2));
+      console.log(search.body.tracks?.items[0].album.images[0].url)
       return await socket.sendMessage(room, {
         text: "Daftar Lagu dari hasil pencarian *" + src+"* halaman ke "+(Math.floor(offset/5)+1),
         footer: "Frasydi Bot",
@@ -125,14 +127,20 @@ export default async function spotify(
     } catch (err) {
       console.log("Test");
     }
+    await socket.sendMessage(room, {
+      image : {url : selectedSong?.album.images[0].url as string},
+      caption : `Judul : ${selectedSong?.name}\nAlbum : ${selectedSong?.album.name}\nArtis : ${selectedSong?.artists[0].name}\nLength : ${convertMsToTime(selectedSong?.duration_ms as number)}`,
+      
+    }, {quoted : messageInstance})
     await socket.sendMessage(
       room,
       {
         audio: { url: `media/temp/${dirName}/${selectedSong?.name}.mp3` },
-        ptt: false,
         mimetype: "audio/mp4",
-      },
-      { quoted: messageInstance }
+        footer : "Frasydi Bot",
+        
+      }, 
+      {quoted : messageInstance}
     );
     removeDir(`media/temp/${dirName}/`);
   } catch (err) {

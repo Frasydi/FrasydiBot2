@@ -51,7 +51,7 @@ export default async function MiddlewareController(
     key: message.messages[0].key.id as string,
     fromMe: message.messages[0].key.fromMe as boolean,
     room: message.messages[0].key.remoteJid as string,
-    pesan: pesan.split(" ").slice(1),
+    pesan: pesan.trim().split(" ").slice(1),
     pengirim: isGroup
       ? (message.messages[0].key.participant as string)
       : (message.messages[0].key.remoteJid as string),
