@@ -67,11 +67,10 @@ export default async function Sholat(socket: WASocket, {
         if(data2.status != "ok") throw "Status is not Ok"
         const jadwal = data.jadwal.data
         await socket.sendMessage(room, {
-        text: `Jadwal Sholat di Kota ${data2.kota[0].nama} Hari ini\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
+        text: `Jadwal Sholat di ${data2.kota[0].nama} Hari ini\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
         footer: 'Frasydi Bot',
         buttons: [
             {buttonId: getOptions()?.prefix+"Sholat", buttonText: {displayText: 'Daftar Semua Kota'}, type: 1},
-
           ]})
     }catch(err) {
         console.log(err)
