@@ -70,6 +70,7 @@ async function connectToWhatsApp () {
         } else if(connection === 'open') {
             console.log('opened connection')
             AzanNotification(sock)
+        }
     })
     
     sock.ev.on("messages.delete",(m) => {
