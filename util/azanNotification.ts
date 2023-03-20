@@ -1,7 +1,6 @@
 import { WASocket } from "@adiwajshing/baileys";
 import axios from "axios";
 import { getOptions } from "./option";
-import ct from "countries-and-timezones"
 export default function AzanNotification(socket: WASocket) {
   const location = new Map();
   const today = new Date();
@@ -11,7 +10,7 @@ export default function AzanNotification(socket: WASocket) {
 }
 function handleTime(socket: WASocket, today: Date, location: Map<number, any>) {
     const timeNow = new Date();
-    
+    if(today.getDate() != timeNow.getDate()) location.clear()
     const group: Array<{ room: string; status: boolean;timezone : number,  kode : number }> =
     getOptions().shalat;
   group.map(async (el) => {
@@ -30,8 +29,10 @@ function handleTime(socket: WASocket, today: Date, location: Map<number, any>) {
         console.log(fetch.data)
         const data = fetch.data;
         const jadwal = data.jadwal.data;
-        console.log(jadwal);
         location.set(el.kode, {
+          imsak : getTime(jadwal.imsak),
+          terbit : getTime(jadwal.terbit),
+          dhuha : getTime(jadwal.dhuha),
           ashar: getTime(jadwal.ashar),
           dzuhur: getTime(jadwal.dzuhur),
           maghrib: getTime(jadwal.maghrib),
@@ -44,7 +45,6 @@ function handleTime(socket: WASocket, today: Date, location: Map<number, any>) {
       const jadwal : {[key:string] : Date}= location.get(el.kode);
       const keys = Object.keys(jadwal);
       keys.forEach((el2) => {
-        console.log(targetDate, jadwal[el2])
         if (targetDate.getTime() == jadwal[el2].getTime()) {
           socket.sendMessage(el.room, {
             text: "Sekarang waktunya sholat " + el2,
