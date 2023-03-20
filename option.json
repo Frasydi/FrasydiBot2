@@ -12,6 +12,12 @@
       "timezone": 8,
       "status": true,
       "kode": 930
+    },
+    {
+      "timezone": 9,
+      "room": "6282239437989@s.whatsapp.net",
+      "status": false,
+      "kode": 969
     }
   ],
   "alarm": {

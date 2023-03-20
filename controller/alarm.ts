@@ -1,5 +1,6 @@
 import { WASocket } from '@adiwajshing/baileys';
 import { messageType } from '../controller_middleware';
+import { timeZoneConvert } from '../util/azanNotification';
 import getMentions from '../util/getMentions';
 import { getOptions, setOptions } from '../util/option';
 import { timeZoneMap } from './optShalat';
@@ -46,7 +47,9 @@ export default async function alarm(socket: WASocket, {
     const date = new Date()
     date.setFullYear(parseInt(tahun), parseInt(bulan)-1, parseInt(tanggal) )
     date.setHours( parseInt(jam), parseInt(menit), 0, 0)
-    if(date.getTime() < Date.now()) throw `Tanggal tidak bisa sebelum saat ini`
+    const now = timeZoneConvert(new Date(), timeZoneMap[tzone])
+    console.log(date.getTime(), now.getTime())
+    if(date.getTime() < now.getTime()) throw `Tanggal tidak bisa sebelum saat ini`
     const alarm = getOptions().alarm
     alarm[room] = {
         pesan : text,
