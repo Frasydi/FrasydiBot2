@@ -69,7 +69,6 @@ async function connectToWhatsApp () {
             }
         } else if(connection === 'open') {
             console.log('opened connection')
-            AzanNotification(sock)
         }
     })
     
