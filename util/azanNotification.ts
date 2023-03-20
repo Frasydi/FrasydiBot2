@@ -6,6 +6,11 @@ export default function AzanNotification(socket: WASocket) {
   const location = new Map();
   const today = new Date();
   setInterval(() => {
+   handleTime(socket, today, location) 
+    
+  }, 1000);
+}
+function handleTime(socket:WASocket, today : Date, location : Map<number, any>) {
     const timeNow = Date.now();
     const group: Array<{ room: string; status: boolean; kode: number }> =
       getOptions().shalat;
@@ -43,11 +48,9 @@ export default function AzanNotification(socket: WASocket) {
         });
       } catch (err) {
         console.log(err);
-      }
-    });
-  }, 1000);
-}
+      }});
 
+}
 function getTime(str: string) {
   const [hours, minute] = str.split(":").map(Number);
 
