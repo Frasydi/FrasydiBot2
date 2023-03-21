@@ -30,7 +30,7 @@ export default async function instagram(socket: WASocket, {
 }
 
 async function sendOne(link : string, room : string, socket : WASocket) {
-    const file =link?.match(/(?<=uri\=)?[a-zA-Z0-9%-._]+(.webp|.mp4)/gm)?.[0]
+    const file =link?.match(/(?<=uri\=)[a-zA-Z0-9%-._]+(.webp|.mp4)|[a-zA-Z0-9%-._]+(.webp|.mp4)/gm)?.[0]
     console.log(file)
     if(file == null) throw `Ada masalah`
     const mime = mimeType.lookup(file) 
