@@ -117,13 +117,14 @@ export default async function spotify(
     let src = pesan.slice(1).join(" ");
 
     let ind = 0;
-    if (!src.includes("|")) throw "Harus include index";
-    const temp = src.split("|");
-    if (temp.length < 2) throw "Tampaknya ada masalah";
-    src = temp.at(0) as string;
-    if (!/[0-9]+/i.test(temp.at(1) as string))
+    if (src.includes("|")) {
+      const temp = src.split("|");
+      if (temp.length < 2) throw "Tampaknya ada masalah";
+      src = temp.at(0) as string;
+      if (!/[0-9]+/i.test(temp.at(1) as string))
       throw "Untuk index harus menggunakan angka";
-    ind = parseInt(temp.at(1) as string) - 1;
+      ind = parseInt(temp.at(1) as string) - 1;
+    }
     if (ind < 0) throw "Index tidak boleh kurang atau sama dengan 0";
     const search = await spotifyApi.searchTracks(src, {
       limit: 5,

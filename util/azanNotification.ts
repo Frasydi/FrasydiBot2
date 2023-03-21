@@ -3,7 +3,7 @@ import axios from "axios";
 import { getOptions } from "./option";
 export default function AzanNotification(socket: WASocket) {
   const location = new Map();
-  const today = timeZoneConvert(new Date(), 8);
+  const today = new Date();
   setInterval(() => {
     handleTime(socket, today, location);
   }, 1000);
@@ -22,7 +22,7 @@ async function handleTime(socket: WASocket, today: Date, location: Map<number, a
       if (
         timeZoneConvert(today, el.timezone).getDate() != targetDate.getDate()
       ) {
-        console.log(today.getDate(), targetDate.getDate());
+        console.log(timeZoneConvert(today, el.timezone).getDate(), targetDate.getDate());
         await socket.sendMessage("6282239437989@s.whatsapp.net", {text : `Terjadi perubahan waktu, ${today} dan ${targetDate}` })
         today = new Date();
         location.delete(el.kode);
