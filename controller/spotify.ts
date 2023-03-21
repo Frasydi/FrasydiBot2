@@ -76,26 +76,37 @@ export default async function spotify(
       ];
       search.body.tracks?.items.forEach((el, ind) => {
         list[1].rows?.push({
-          rowId: getOptions()?.prefix +"spotify download " + src + "|" + (offset + (ind + 1)),
+          rowId:
+            getOptions()?.prefix +
+            "spotify download " +
+            src +
+            "|" +
+            (offset + (ind + 1)),
           title: `${el.name}`,
-          description : `Album : ${el.album.name}, Artis : ${el.artists[0].name}`
+          description: `Album : ${el.album.name}, Artis : ${el.artists[0].name}`,
         });
       });
 
       if (offset > 0) {
         list?.[0]?.rows?.push({
-          rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset - 5),
+          rowId:
+            getOptions()?.prefix + "spotify search " + src + "|" + (offset - 5),
           title: "Prev",
         });
       }
       list?.[0]?.rows?.push({
-        rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset + 5),
+        rowId:
+          getOptions()?.prefix + "spotify search " + src + "|" + (offset + 5),
         title: "Next",
       });
       console.log(JSON.stringify(list, null, 2));
-      console.log(search.body.tracks?.items[0].album.images[0].url)
+      console.log(search.body.tracks?.items[0].album.images[0].url);
       return await socket.sendMessage(room, {
-        text: "Daftar Lagu dari hasil pencarian *" + src+"* halaman ke "+(Math.floor(offset/5)+1),
+        text:
+          "Daftar Lagu dari hasil pencarian *" +
+          src +
+          "* halaman ke " +
+          (Math.floor(offset / 5) + 1),
         footer: "Frasydi Bot",
         title: "Daftar",
         buttonText: "List",
@@ -122,27 +133,37 @@ export default async function spotify(
     const dirName = uuidv4();
     try {
       execSync(
-        `spotifydl https://open.spotify.com/track/${selectedSong?.id} --o media/temp/${dirName} --oo media/temp/${dirName}`
+        `spotifydl https://open.spotify.com/track/${selectedSong?.id} --oo media/temp/${dirName} --o media/temp/${dirName}`
       );
     } catch (err) {
       console.log("Test");
     }
-    await socket.sendMessage(room, {
-      image : {url : selectedSong?.album.images[0].url as string},
-      caption : `Judul : ${selectedSong?.name}\nAlbum : ${selectedSong?.album.name}\nArtis : ${selectedSong?.artists[0].name}\nLength : ${convertMsToTime(selectedSong?.duration_ms as number)}`,
-      
-    }, {quoted : messageInstance})
+
+    if (!fs.existsSync(`media/temp/${dirName}/${selectedSong?.name}.mp3`))
+      throw `Ada kesalahan`;
+    await socket.sendMessage(
+      room,
+      {
+        image: { url: selectedSong?.album.images[0].url as string },
+        caption: `Judul : ${selectedSong?.name}\nAlbum : ${
+          selectedSong?.album.name
+        }\nArtis : ${selectedSong?.artists[0].name}\nLength : ${convertMsToTime(
+          selectedSong?.duration_ms as number
+        )}`,
+      },
+      { quoted: messageInstance }
+    );
     await socket.sendMessage(
       room,
       {
         audio: { url: `media/temp/${dirName}/${selectedSong?.name}.mp3` },
         mimetype: "audio/mp4",
-        footer : "Frasydi Bot",
-        
-      }, 
-      {quoted : messageInstance}
+        footer: "Frasydi Bot",
+      },
+      { quoted: messageInstance }
     );
-    removeDir(`media/temp/${dirName}/`);
+
+    removeDir(`media/temp/${dirName}`);
   } catch (err) {
     console.log(err);
     await socket.sendMessage(room, {

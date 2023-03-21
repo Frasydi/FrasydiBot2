@@ -13,6 +13,6 @@ export default function removeDir(path: string) {
       fs.unlinkSync(curPath);
     }
   });
-  fs.rmdirSync(path);
+    fs.rmdirSync(path);
   return;
 }
