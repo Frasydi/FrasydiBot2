@@ -47,7 +47,10 @@ export default async function MiddlewareController(
     message.messages[0].message?.extendedTextMessage?.contextInfo
       ?.quotedMessage;
   const msgType = Object.keys(message?.messages[0].message as object)[0];
-  if (!(pesan?.at(0) == (getOptions().prefix as string))) return Help(socket,   message.messages[0].key.remoteJid as string );
+  if (!(pesan?.at(0) == (getOptions().prefix as string))) {
+    if(!isGroup) Help(socket,   message.messages[0].key.remoteJid as string )
+    return
+  }
 
   const sending: messageType = {
     key: message.messages[0].key.id as string,
