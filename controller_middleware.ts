@@ -9,6 +9,7 @@ import ControllerFunctions from "./controller_add";
 import { getOptions } from "./util/option";
 import { getGroupMetadata } from "./util/group";
 import { getSuggesSpell } from "./util/spellChecker";
+import Help from "./controller/help";
 
 export interface messageType {
   key: string;
@@ -45,8 +46,9 @@ export default async function MiddlewareController(
   const quoted =
     message.messages[0].message?.extendedTextMessage?.contextInfo
       ?.quotedMessage;
-  if (!(pesan?.at(0) == (getOptions().prefix as string))) return;
   const msgType = Object.keys(message?.messages[0].message as object)[0];
+  if (!(pesan?.at(0) == (getOptions().prefix as string))) return Help(socket,   message.messages[0].key.remoteJid as string );
+
   const sending: messageType = {
     key: message.messages[0].key.id as string,
     fromMe: message.messages[0].key.fromMe as boolean,

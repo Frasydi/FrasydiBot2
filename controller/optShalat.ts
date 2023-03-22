@@ -35,9 +35,9 @@ export default async function optShalat(socket: WASocket, {
     const tzone =pesan[2].toUpperCase()
     if(!(tzone == "WIB" || tzone == "WITA" || tzone == "WIT") ) throw "Harus WIB, WITA, atau WIT"
     
-    const fetch = await axios.get(`https://api.banghasan.com/sholat/format/json/kota/kode/${pesan[1]}`)
-    if(fetch.data.status != "ok") throw "Status Tidak Oke"
-    if(fetch.data.kota.length == 0) throw "Kosong"
+    const fetch = await axios.get( `https://api.myquran.com/v1/sholat/kota/id/${pesan[1]}`)
+    if(!fetch.data.status) throw "Status Tidak Oke"
+    if(fetch.data.data == "kosong") throw "Kosong"
     const shalat : Array<{room : string, status : boolean, kode : number, timezone : number}> = getOptions().shalat
     const ind = shalat.findIndex(el => el.room == room)
     if(ind == -1) shalat.push({room : room, timezone : timeZoneMap[tzone] ,status : pesan[0] == "true", kode : parseInt(pesan[1])})

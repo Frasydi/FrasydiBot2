@@ -10,15 +10,7 @@ export const bantuan = [
 ]
 export const isGroup = false
 export const isAdmin = false
-export default async function Help(socket: WASocket, {
-    key,
-    fromMe,
-    pesan,
-    room,
-    pengirim_nama,
-    pengirim,
-    isGroup,
-}: messageType) {
+export default async function Help(socket: WASocket, room : string) {
     console.log(kategoris)
     const text = Object.keys(kategoris).map(el => {
         let tempText = ""

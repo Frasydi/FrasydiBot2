@@ -2,23 +2,11 @@
   "prefix": "/",
   "shalat": [
     {
+      "timezone": 8,
       "room": "120363026138625122@g.us",
-      "timezone": 8,
       "status": true,
-      "kode": 930
-    },
-    {
-      "room": "120363042377632495@g.us",
-      "timezone": 8,
-      "status": true,
-      "kode": 930
+      "kode": 2622
     }
   ],
-  "alarm": {
-    "628819873445@s.whatsapp.net": {
-      "pesan": "tes",
-      "timeZone": 8,
-      "waktu": 1682034120000
-    }
-  }
+  "alarm": {}
 }
