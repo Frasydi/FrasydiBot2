@@ -64,18 +64,19 @@ export default function AzanNotification(socket: WASocket) {
 
         const jadwal: { [key: string]: Date } = location.get(el.kode);
         const keys = Object.keys(jadwal);
-        keys.forEach((el2) => {
+        const promis = keys.map(async(el2) => {
           if(el2 == "today") return
           if (
             targetDate.getMinutes() == jadwal[el2].getMinutes() &&
             targetDate.getHours() == jadwal[el2].getHours() &&
             targetDate.getSeconds() == 0
           ) {
-            socket.sendMessage(el.room, {
+            await socket.sendMessage(el.room, {
               text: "Sekarang waktunya " + el2,
-            }).catch(err => {console.log(err)});
+            })
           }
         });
+        await Promise.all(promis)
       } catch (err) {
         console.log(err);
       }

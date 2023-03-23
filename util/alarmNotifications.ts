@@ -15,7 +15,9 @@ export default function AlarmNotifications(socket :WASocket) {
         const convTimeZone = timeZoneConvert(timeNow, el.timeZone)
         if(convTimeZone.getTime() == el.waktu) {
           console.log("Dapat")
-          socket.sendMessage(key, {text : `Alarm!!\n\n${el.pesan}`})
+          socket.sendMessage(key, {text : `Alarm!!\n\n${el.pesan}`}).catch(err => {
+            console.log(err)
+          })
           map.delete(key)
           const newMap = Object.fromEntries(map)
           setOptions(newMap, "alarm")

@@ -10,8 +10,26 @@ export const bantuan = [
 ]
 export const isGroup = false
 export const isAdmin = false
-export default async function Help(socket: WASocket, room : string) {
+export default async function Help(socket: WASocket, {
+    key,
+    fromMe,
+    pesan,
+    room,
+    pengirim_nama,
+    pengirim,
+    isGroup,
+}: messageType) {
     console.log(kategoris)
+    const text = helpSend()
+    await socket.sendMessage(room, {
+        text : `
+        *Ini adalah BOT FRASYDI*
+        \n${text}`
+    })
+
+}
+
+export function helpSend() {
     const text = Object.keys(kategoris).map(el => {
         let tempText = ""
         tempText = `*${el}*\n`
@@ -20,10 +38,5 @@ export default async function Help(socket: WASocket, room : string) {
         })
         return tempText
     }).join("\n")
-    await socket.sendMessage(room, {
-        text : `
-        *Ini adalah BOT FRASYDI*
-        \n${text}`
-    })
-
+    return text
 }

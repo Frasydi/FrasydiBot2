@@ -9,7 +9,7 @@ import ControllerFunctions from "./controller_add";
 import { getOptions } from "./util/option";
 import { getGroupMetadata } from "./util/group";
 import { getSuggesSpell } from "./util/spellChecker";
-import Help from "./controller/help";
+import Help, { helpSend } from "./controller/help";
 
 export interface messageType {
   key: string;
@@ -48,7 +48,14 @@ export default async function MiddlewareController(
       ?.quotedMessage;
   const msgType = Object.keys(message?.messages[0].message as object)[0];
   if (!(pesan?.at(0) == (getOptions().prefix as string))) {
-    if(!isGroup) Help(socket,   message.messages[0].key.remoteJid as string )
+    if(!isGroup) {
+      const text = helpSend()
+      await socket.sendMessage(message.messages[0].key.remoteJid as string, {
+        text : `
+        *Ini adalah BOT FRASYDI*
+        \n${text}`
+    })
+    }
     return
   }
 
@@ -56,7 +63,7 @@ export default async function MiddlewareController(
     key: message.messages[0].key.id as string,
     fromMe: message.messages[0].key.fromMe as boolean,
     room: message.messages[0].key.remoteJid as string,
-    pesan: pesan.trim().split(" ").slice(1),
+    pesan: pesan?.trim().split(" ").slice(1) ?? "" ,
     pengirim: isGroup
       ? (message.messages[0].key.participant as string)
       : (message.messages[0].key.remoteJid as string),

@@ -72,8 +72,12 @@ async function connectToWhatsApp () {
             }
         } else if(connection === 'open') {
             console.log('opened connection')
-            AzanNotification(sock)
-            AlarmNotifications(sock)
+            try {
+                AzanNotification(sock)
+                AlarmNotifications(sock)
+            }catch(err) {
+                console.log(err)
+            }
         }
     })
     
@@ -90,4 +94,12 @@ async function connectToWhatsApp () {
     })
 
 }
-connectToWhatsApp()
+async function catchAndThrow() {
+    try {
+        await connectToWhatsApp()
+    }catch(err) {
+        catchAndThrow()
+    }
+}
+
+catchAndThrow()

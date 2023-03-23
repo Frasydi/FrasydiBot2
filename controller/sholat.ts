@@ -1,7 +1,9 @@
+import { timeZoneMap } from './optShalat';
 import { WASocket } from "@adiwajshing/baileys";
 import { messageType } from "../controller_middleware";
 import { getOptions } from "../util/option";
 import axios from "axios";
+import { timeZoneConvert } from '../util/azanNotification';
 export const types = /^sholat$/i;
 export const nama = "Sholat";
 export const kategori = "Education";
@@ -33,7 +35,12 @@ export default async function Sholat(
     return;
   }
   const isKode = /[0-9]+/i.test(pesan[0]);
-  const date = new Date();
+  let tzone = 0
+  if(pesan[1] != null) {
+    if(!(pesan[1] == "WIB" || pesan[1] == "WITA" || pesan[1] == "WIT") ) throw "Harus WIB, WITA, atau WIT"
+    tzone = timeZoneMap[pesan[1]]
+  }
+  const date = timeZoneConvert(new Date(), tzone);
   try {
     console.log(pesan[0]);
     if (!isKode) {
@@ -58,7 +65,8 @@ export default async function Sholat(
       const jadwal = data2.data.jadwal;
       console.log(data2)
     await socket.sendMessage(room, {
-      text: `Jadwal Sholat di ${data2.data.lokasi} pada ${jadwal.tanggal}\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`
+      text: `Jadwal Sholat dan Puasa di ${data2.data.lokasi} pada ${jadwal.tanggal}\n\nImsak : ${jadwal.imsak}\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
+    
     });
 
       return;
@@ -81,7 +89,7 @@ export default async function Sholat(
     const jadwal = data.data.jadwal;
     console.log(jadwal)
     await socket.sendMessage(room, {
-      text: `Jadwal Sholat di ${data2.data.lokasi} pada ${jadwal.tanggal}\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
+      text: `Jadwal Sholat dan Puasa di ${data2.data.lokasi} pada ${jadwal.tanggal}\n\nImsak : ${jadwal.imsak}\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
       footer: "Frasydi Bot",
       buttons: [
         {
