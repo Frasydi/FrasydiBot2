@@ -1,6 +1,6 @@
 node_modules
-auth_info_baileys
+auth_info_baileys 
 baileys_store.json
-.env
+.env 
+option.json
 media/*
-option
