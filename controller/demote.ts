@@ -3,6 +3,7 @@ import { messageType } from '../controller_middleware';
 import convertTel from '../util/convertTel';
 import { getOptions } from '../util/option';
 import getMentions from "../util/getMentions"
+import { z } from 'zod';
 export const types = /demote/i
 export const nama = "demote"
 export const kategori = "Group"
@@ -24,7 +25,12 @@ export default async function demote(socket: WASocket, {
 
     if(!isGroup) return await socket.sendMessage(room, {text : "Harus Group"})
     if(!isAdmin) return await socket.sendMessage(room, {text : "Harus Admin"})
-    if(pesan.join(" ").trim().length == 0)return await socket.sendMessage(room, {text : "Harus Ada Kontak"})
+    const validate = z.array(z.string().includes("@")).min(1)
+    try {
+        validate.parse(pesan)
+    }catch(err) {
+        throw `Harus berupa kontak`
+    }
     await socket.groupParticipantsUpdate(room, pesan.map(el => convertTel(el)), "demote")
     await socket.sendMessage(room, {text : "Berhasil Demote "+pesan.join(" "), mentions : getMentions(pesan.join(" "))})
 }

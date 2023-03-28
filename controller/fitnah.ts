@@ -5,6 +5,7 @@ import { getOptions } from '../util/option';
 import generateString from '../util/generateString';
 import {v4 as uuidv4} from "uuid"
 import convertTel from '../util/convertTel';
+import { z } from 'zod';
 export const types = /fitnah/i
 export const nama = "Fitnah"
 export const kategori = "Fun"
@@ -23,9 +24,19 @@ export default async function Fitnah(socket: WASocket, {
     isGroup,
     messageInstance
 }: messageType) {
-    if(pesan.length < 2) return await socket.sendMessage(room, {text : "Kontak dan isi fitnah kosong"})
-    if(pesan.slice(1).join(" ").trim().length == 0) return await socket.sendMessage(room, {text : "Isi fitnah kosong"})
-    console.log(pesan.join(" "))
+    const validate = z.array(z.string()).min(2)
+    try {
+        validate.parse(pesan)
+    }catch(err) {
+        throw "Kontak dan isi fitnah kosong"
+    }
+    
+    const isiFitnah = pesan.slice(1).join(" ")
+    try {
+        z.string().min(1).parse(isiFitnah)
+    }catch(err) {
+        throw `Isi Fitnah tidak boleh kosong`
+    }
     const fitnah:proto.IWebMessageInfo = {
         key : {
             remoteJid : room,

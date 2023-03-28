@@ -1,5 +1,6 @@
 import { WASocket } from '@adiwajshing/baileys';
 import axios from 'axios';
+import { z } from 'zod';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 export const types = /gambar/i
@@ -29,7 +30,12 @@ export default async function Gambar(socket: WASocket, {
     isGroup,
     messageInstance
 }: messageType) {
-    if(isLimit ) return await socket.sendMessage(room, {text :"Hanya bisa digunakan per 10 menit, silahkan tunggu dulu"}, {quoted : messageInstance})
+    if(isLimit ) throw "Hanya bisa digunakan per 10 menit, silahkan tunggu dulu"
+    try {
+        z.array(z.string()).min(1).parse(pesan)
+    }catch(err) {
+        throw `Promp tidak boleh kosong`
+    }
     try {
         isLimit = true
         const res = await axios.get(`https://api.unsplash.com/search/photos?client_id=${process.env.UNSPLASH}&query=${pesan.join(" ")}`)

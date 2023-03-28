@@ -24,9 +24,7 @@ export default async function kick(socket: WASocket, {
 }: messageType) {
     if(!isGroup) return await socket.sendMessage(room, {text : "Harus Group"})
     if(!isAdmin) return await socket.sendMessage(room, {text : "Harus Admin"})
-    console.log(kontak)
     const newContact = kontak.map(el => "@"+el)
-    console.log(newContact)
     try {
         const promise = newContact.map(async(el) => {
             console.log(el, "El kontak")

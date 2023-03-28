@@ -133,10 +133,14 @@ export default async function MiddlewareController(
   }
   const filterCmd = ControllerFunctions.filter(el => el.types.test(mispelled.suggestions[0]))[0]
   console.log(filterCmd)
-  filterCmd.default(socket, sending).catch((err: any) => {
+  try {
+    await filterCmd.default(socket, sending)
+
+  }catch(err) {
     console.log(err);
-    socket.sendMessage(sending.room, {
+    await socket.sendMessage(sending.room, {
       text: typeof err == "string" ? err : "Ada Error",
     });
-  });
+
+  }
 }

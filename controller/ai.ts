@@ -1,5 +1,6 @@
 import { WASocket } from '@adiwajshing/baileys';
 import axios from 'axios';
+import { z } from 'zod';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 export const types = /ai/i
@@ -32,6 +33,12 @@ export default async function AI(socket: WASocket, {
     }, {
         quoted : messageInstance
     })
+    const validate = z.array(z.string()).min(1)
+    try {
+        validate.parse(pesan)
+    }catch(err) {
+        throw `Pesan harus berupa teks dan tidak boleh kosong`
+    }
     try {
         isLimit = true
         const res = await axios.post("https://chatgpt-api.shn.hk/v1/", {

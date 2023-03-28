@@ -1,5 +1,6 @@
 import { WASocket } from "@adiwajshing/baileys";
 import axios from "axios";
+import { TypeOf, z } from "zod";
 import { getOptions } from "./option";
 export default function AzanNotification(socket: WASocket) {
   const location = new Map();
@@ -24,7 +25,6 @@ export default function AzanNotification(socket: WASocket) {
           const { today }: { [key: string]: any } = location.get(el.kode);
           const hasil = checkPerbedaan(
             today,
-            el.kode,
             targetDate,
             isSpam,
             restoreSpam
@@ -48,17 +48,22 @@ export default function AzanNotification(socket: WASocket) {
           if (!fetch.data.status) throw "Not Ok";
           const data = fetch.data;
           const jadwal = data.data.jadwal;
+          try {
+            location.set(el.kode, {
+              imsak: getTime(jadwal.imsak, el.timezone),
+              terbit: getTime(jadwal.terbit, el.timezone),
+              dhuha: getTime(jadwal.dhuha, el.timezone),
+              ashar: getTime(jadwal.ashar, el.timezone),
+              dzuhur: getTime(jadwal.dzuhur, el.timezone),
+              maghrib: getTime(jadwal.maghrib, el.timezone),
+              isya: getTime(jadwal.isya, el.timezone),
+              today: timeZoneConvert(new Date(), el.timezone).getDate(),
+            });
 
-          location.set(el.kode, {
-            imsak: getTime(jadwal.imsak, el.timezone),
-            terbit: getTime(jadwal.terbit, el.timezone),
-            dhuha: getTime(jadwal.dhuha, el.timezone),
-            ashar: getTime(jadwal.ashar, el.timezone),
-            dzuhur: getTime(jadwal.dzuhur, el.timezone),
-            maghrib: getTime(jadwal.maghrib, el.timezone),
-            isya: getTime(jadwal.isya, el.timezone),
-            today: timeZoneConvert(new Date(), el.timezone).getDate(),
-          });
+          }catch(err) {
+            console.log(err)
+            await socket.sendMessage(el.room, {text : typeof err == "string" ? err : "Ada masalah"})
+          }
           console.log(location);
         }
 
@@ -85,16 +90,15 @@ export default function AzanNotification(socket: WASocket) {
   }, 1000);
 }
 function checkPerbedaan(
-  dateToday: number,
-  kode: number,
-  targetDate: Date,
+  date_today: number,
+  target_date: Date,
   isSpam: boolean,
-  restoreSpam: any
+  restoreSpam: () => void
 ) {
-  if (dateToday != targetDate.getDate()) {
+  if (isSpam) return false;
+  if (date_today != target_date.getDate()) {
     isSpam = true;
     restoreSpam();
-    if (isSpam) return;
     return true;
   }
   return false;
@@ -107,6 +111,8 @@ export function timeZoneConvert(timeNow: Date, tzone: number) {
   return date;
 }
 function getTime(str: string, timezone: number) {
+  const validate = z.string().includes(":").safeParse(str)
+  if(!validate.success) throw `str expected to have ':'`
   const [hours, minute] = str.split(":").map(Number);
   const date = timeZoneConvert(new Date(), timezone);
   date.setHours(hours, minute, 0, 0);
