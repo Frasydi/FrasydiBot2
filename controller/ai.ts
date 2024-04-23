@@ -1,7 +1,7 @@
-import { WASocket } from '@adiwajshing/baileys';
 import axios from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
+import { WASocket } from '@whiskeysockets/baileys';
 export const types = /ai/i
 export const nama = "AI"
 export const kategori = "Tools"

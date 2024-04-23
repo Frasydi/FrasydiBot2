@@ -1,10 +1,8 @@
-import { GroupParticipant, MessageUpsertType } from "@adiwajshing/baileys/lib/Types";
-import { proto } from "@adiwajshing/baileys/WAProto";
-import { WASocket } from '@adiwajshing/baileys';
 
 import ControllerFunctions from "./controller_add";
 import { getOptions } from "./util/option";
 import { getGroupMetadata } from "./util/group";
+import { GroupParticipant, MessageUpsertType, WASocket, proto } from "@whiskeysockets/baileys";
 
 export interface messageType {
     key: string, 

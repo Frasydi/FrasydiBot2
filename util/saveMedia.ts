@@ -1,5 +1,5 @@
-import { proto } from "@adiwajshing/baileys/WAProto";
-import { downloadMediaMessage } from "@adiwajshing/baileys";
+import { proto } from "@whiskeysockets/baileys/WAProto";
+import { downloadMediaMessage } from "@whiskeysockets/baileys";
 import duplicateName from "./duplicate name";
 
 export default async function saveMedia(message: proto.IWebMessageInfo) {

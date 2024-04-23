@@ -1,4 +1,4 @@
-import { WASocket } from '@adiwajshing/baileys';
+import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import convertTel from '../util/convertTel';
 import { getOptions } from '../util/option';

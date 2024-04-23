@@ -1,6 +1,6 @@
-import { proto } from '@adiwajshing/baileys/WAProto';
+import { proto } from '@whiskeysockets/baileys/WAProto';
 import  childprocess  from 'child_process';
-import { WASocket, downloadMediaMessage } from '@adiwajshing/baileys';
+import { WASocket, downloadMediaMessage } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { ConvertWebpBuffer } from '../util/convertwebp';
 import duplicateName from '../util/duplicate name';

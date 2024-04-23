@@ -1,4 +1,4 @@
-import { WASocket } from '@adiwajshing/baileys';
+import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 export const types = /list/i

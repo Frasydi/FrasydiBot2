@@ -1,4 +1,4 @@
-import { WASocket } from '@adiwajshing/baileys';
+import { WASocket } from '@whiskeysockets/baileys';
 import axios from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';

@@ -1,6 +1,6 @@
-import { proto } from "@adiwajshing/baileys/WAProto";
+import { proto } from "@whiskeysockets/baileys/WAProto";
 import { execSync } from "child_process";
-import { WASocket } from "@adiwajshing/baileys";
+import { WASocket } from "@whiskeysockets/baileys";
 import { messageType } from "../controller_middleware";
 import { getOptions } from "../util/option";
 import SpotifyWebApi from "spotify-web-api-node";
@@ -13,6 +13,8 @@ export const kategori = "Fun";
 export const bantuan = [getOptions()?.prefix + "spotify"];
 export const isGroup = false;
 export const isAdmin = false;
+
+
 type tipe = "search" | "download";
 interface buttons {
   buttonId: string;

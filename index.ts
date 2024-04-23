@@ -1,12 +1,9 @@
-import { proto } from '@adiwajshing/baileys/WAProto';
-import makeWASocket, {makeInMemoryStore} from "@adiwajshing/baileys"
-import { DisconnectReason } from "@adiwajshing/baileys/lib/Types"
-import { Browsers, useMultiFileAuthState } from "@adiwajshing/baileys/lib/Utils"
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
 import * as fs from "fs"
 import AzanNotification from './util/azanNotification';
+import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
 dotenv.config()
 const store = makeInMemoryStore({ 
    

@@ -1,5 +1,5 @@
-import { proto } from '@adiwajshing/baileys/WAProto';
-import { WASocket } from '@adiwajshing/baileys';
+import { proto } from '@whiskeysockets/baileys/WAProto';
+import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 import generateString from '../util/generateString';

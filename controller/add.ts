@@ -1,8 +1,8 @@
-import { WASocket } from '@adiwajshing/baileys';
 import { messageType } from '../controller_middleware';
 import convertTel from '../util/convertTel';
 import { getOptions } from '../util/option';
 import getMentions from "../util/getMentions"
+import { WASocket } from '@whiskeysockets/baileys';
 export const types = /Add/i
 export const nama = "Add"
 export const kategori = "Group"

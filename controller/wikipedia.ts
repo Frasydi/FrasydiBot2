@@ -1,4 +1,4 @@
-import { WASocket } from '@adiwajshing/baileys';
+import { WASocket } from '@whiskeysockets/baileys';
 import axios from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
@@ -49,6 +49,7 @@ export default async function Wikipedia(socket: WASocket, {
 }: messageType) {
     await socket.sendPresenceUpdate("composing", room)
     if(pesan.join(" ").trim().length == 0) return await socket.sendMessage(room, {text : "Anda tidak memasukkan pencarian"})
+        console.log(pesan)
     const hasil = await axios.get(`https://id.wikipedia.org/w/api.php?action=query&list=search&srsearch=${encodeURIComponent(pesan.join(" "))}&format=json&uselang=id`)
     
     const data:searchType = hasil.data

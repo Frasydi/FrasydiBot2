@@ -1,4 +1,4 @@
-import { WASocket } from '@adiwajshing/baileys';
+import { WASocket } from '@whiskeysockets/baileys';
 import ControllerFunctions, { kategoris } from '../controller_add';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
