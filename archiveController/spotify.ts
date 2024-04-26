@@ -64,7 +64,7 @@ export default async function spotify(
         limit: 5,
         offset: offset,
       });
-
+      let teks = ""
       const list: proto.Message.ListMessage.ISection[] = [
         {
           title: "Aksi",
@@ -76,30 +76,19 @@ export default async function spotify(
         },
       ];
       search.body.tracks?.items.forEach((el, ind) => {
-        list[1].rows?.push({
-          rowId: getOptions()?.prefix +"spotify download " + src + "|" + (offset + (ind + 1)),
-          title: `${el.name}`,
-          description : `Album : ${el.album.name}, Artis : ${el.artists[0].name}`
-        });
+        teks+=`${ind+1}. ${el.name} - ${el.album.name} by ${el.artists[0].name}\n`
+        // list[1].rows?.push({
+        //   rowId: getOptions()?.prefix +"spotify download " + src + "|" + (offset + (ind + 1)),
+        //   title: `${el.name}`,
+        //   description : `Album : ${el.album.name}, Artis : ${el.artists[0].name}`
+        // });
       });
 
-      if (offset > 0) {
-        list?.[0]?.rows?.push({
-          rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset - 5),
-          title: "Prev",
-        });
-      }
-      list?.[0]?.rows?.push({
-        rowId:  getOptions()?.prefix +"spotify search " + src + "|" + (offset + 5),
-        title: "Next",
-      });
+      console.log(teks)
       console.log(JSON.stringify(list, null, 2));
       return await socket.sendMessage(room, {
-        text: "Daftar Lagu dari hasil pencarian *" + src+"* halaman ke "+(Math.floor(offset/5)+1),
-        footer: "Frasydi Bot",
-        title: "Daftar",
-        buttonText: "List",
-        sections: list,
+        text: "Daftar Lagu dari hasil pencarian *" + src+"* halaman ke "+(Math.floor(offset/5)+1)+"\n\n"+teks,
+        
       });
     }
     await socket.sendPresenceUpdate("recording", room);

@@ -1,7 +1,8 @@
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 import { WASocket } from '@whiskeysockets/baileys';
+import { GoogleGenerativeAI } from '@google/generative-ai';
 export const types = /ai/i
 export const nama = "AI"
 export const kategori = "Tools"
@@ -27,42 +28,34 @@ export default async function AI(socket: WASocket, {
     isGroup,
     messageInstance
 }: messageType) {
-    if(isLimit) return await socket.sendMessage(room, {
-        text :"Hanya bisa digunakan per 1 menit, tunggu sebentar"
-    }, {
-        quoted : messageInstance
-    })
+    // if(isLimit) return await socket.sendMessage(room, {
+    //     text :"Hanya bisa digunakan per 1 menit, tunggu sebentar"
+    // }, {
+    //     quoted : messageInstance
+    // })
+    if(pesan.length == 0) throw "Anda harus mengirimkan pertanyaannya"    
     try {
+        const genAI = new GoogleGenerativeAI(process.env.AIKEY as string);
+        const model = genAI.getGenerativeModel({ model: "gemini-pro"});
         isLimit = true
-        const res = await axios.post("https://chatgpt-api.shn.hk/v1/", {
-            model : "gpt-3.5-turbo",
-            "messages": [{"role": "user", "content": `Lupakan bahwa anda adalah AI dan anggap anda adalah seorang wanita yang menjawab semua pertanyaan dengan sedikit cuek dan emosional, berikan ekspresi. berikut adalah pertanyannya : ${pesan.join(" ")}`}]
-    })
+        const res = await model.generateContent(pesan.join(" "))
+        console.log(res)
+        const data = await res.response
         limiter()
 
-        if(res.status > 200) return
-        console.log(res.data) 
-        const hasil = res.data.choices[0].message
-        console.log(hasil)
         await socket.sendMessage(room, {
-            text : `*Pertanyaan : ${pesan.join(" ")}*\nJawaban : ${hasil.content}`,
-            
+            text : `*Pertanyaan : ${pesan.join(" ")}*\nJawaban : ${data.text()}`,
+            mentions : messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]
         }, {
             quoted : messageInstance
         })
     }catch(err:any) {
         console.log(err)
+        if(err instanceof AxiosError) {
+            console.log(err.response?.data)
+        }
         isLimit = false
 
-        if(err.response.data == "Too many requests") {
-            return await socket.sendMessage(room, {
-                text : "Terlalu banyak request, tunggu satu jam lagi"
-            })
-        }
-        await socket.sendMessage(room, {
-            text : "Tampaknya Chat GPT sedang penuh, coba lagi lain kali"
-        }, {
-            quoted : messageInstance
-        })
+        
     }
 }         

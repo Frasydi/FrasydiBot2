@@ -21,12 +21,15 @@ export default async function Fitnah(socket: WASocket, {
     pengirim_nama,
     pengirim,
     isGroup,
-    messageInstance
+    messageInstance,
+    quoted
 }: messageType) {
     if(pesan.length < 2) return await socket.sendMessage(room, {text : "Kontak dan isi fitnah kosong"})
     if(pesan.slice(1).join(" ").trim().length == 0) return await socket.sendMessage(room, {text : "Isi fitnah kosong"})
     console.log(pesan.join(" "))
-    const fitnah:proto.IWebMessageInfo = {
+    console.log(messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid)
+    
+    await socket.sendMessage(room, {text : "",  mentions : messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]}, {quoted : {
         key : {
             remoteJid : room,
             id : uuidv4(),
@@ -34,8 +37,9 @@ export default async function Fitnah(socket: WASocket, {
         },
         messageTimestamp : messageInstance.messageTimestamp,
         message : {
-            extendedTextMessage :  { text :  pesan.slice(1).join(" ") as string}
+            extendedTextMessage :  { text :  pesan.slice(1).join(" ") as string, contextInfo : {
+                mentionedJid : messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid,
+            }}
         }
-    }
-    await socket.sendMessage(room, {text : ""}, {quoted : fitnah})
+    }, })
 }

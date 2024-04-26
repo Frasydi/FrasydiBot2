@@ -3,8 +3,7 @@ import { WASocket } from '@whiskeysockets/baileys';
 import axios from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
-//@ts-ignore
-import { toArabicWord } from 'number-to-arabic-words/dist/index-node.js';
+   
 function toIndiaDigits(string:string){
     var id= ['۰','۱','۲','۳','۴','۵','۶','۷','۸','۹'];
     return string.replace(/[0-9]/g, function(w){

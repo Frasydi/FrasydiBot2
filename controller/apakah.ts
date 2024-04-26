@@ -29,13 +29,20 @@ export default async function Hello(socket: WASocket, {
     } else {
         hasil = "Ya"
     }
+    const mention = [pengirim]
+    
+    const mentions = messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]
+    if(mentions != null) {
+        mention.push(...mentions)
+    }
     await socket.sendMessage(room, {
         text : `Pertanyaan : Apakah ${pesan.join(" ")}\n\nJawaban : ${hasil}`,
-        mentions : [pengirim],
+        mentions : mention,
         
     },
     {
-        quoted : messageInstance
+        quoted : messageInstance,
+        
     }
 )
 }
