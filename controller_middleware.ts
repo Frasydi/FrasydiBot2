@@ -18,18 +18,23 @@ export interface messageType {
     kontak : string[],
     quoted? : proto.IMessage | null | undefined,
     message_type : msg_type,
-    quoted_type? : msg_type
+    quoted_type? : msg_type,
+    mentions : string[]
 }
-type msg_type = "imageMessage" | "videoMessage"
+type msg_type = "imageMessage" | "videoMessage" | "stickerMessage"
 export default async function MiddlewareController(message: {
     messages: proto.IWebMessageInfo[];
     type: MessageUpsertType;
 }, socket: WASocket) {
     const isGroup = message.messages?.[0].key?.participant != null
     const pesan = message.messages[0].message?.conversation ||message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text || message.messages[0].message?.listResponseMessage?.singleSelectReply?.selectedRowId|| message.messages[0].message?.buttonsResponseMessage?.selectedButtonId || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
-    const quoted = message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage
+    const quoted = message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2?.message ||message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage
     if (!(pesan?.at(0) == getOptions().prefix as string)) return
     const msgType = Object.keys(message?.messages[0].message as object)[0] 
+    let mentions = message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text || message.messages[0].message?.extendedTextMessage?.contextInfo?.mentionedJid || message.messages[0].message?.imageMessage?.contextInfo?.mentionedJid || message.messages[0].message?.videoMessage?.contextInfo?.mentionedJid|| []
+    if(typeof mentions == "string") {
+        mentions = [mentions]
+    }
     const sending: messageType = {
 
         key: message.messages[0].key.id as string,
@@ -44,10 +49,11 @@ export default async function MiddlewareController(message: {
         messageInstance : message.messages[0],
         quoted,
         kontak : [],
-        message_type : msgType as unknown as msg_type
+        message_type : msgType as unknown as msg_type,
+        mentions : mentions
     }
     if(quoted != null) {
-        sending.quoted_type = Object.keys(message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage as object)[0] as msg_type
+        sending.quoted_type = Object.keys((message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2?.message || message.messages[0].message?.extendedTextMessage?.contextInfo?.quotedMessage) as object)[0] as msg_type
     }
     if(quoted?.contactMessage?.vcard != null) {
         const contact : string[] = quoted?.contactMessage?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]

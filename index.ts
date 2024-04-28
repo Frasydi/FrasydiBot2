@@ -4,6 +4,8 @@ import dotenv from "dotenv"
 import * as fs from "fs"
 import AzanNotification from './util/azanNotification';
 import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
+import { group } from 'console';
+import convertTel from './util/convertTel';
 dotenv.config()
 const store = makeInMemoryStore({ 
    
@@ -71,6 +73,26 @@ async function connectToWhatsApp () {
     
     sock.ev.on("messages.delete",(m) => {
         console.log(m)
+    })
+    sock.ev.on("group-participants.update", (grup) => {
+        console.log(grup)
+        if(grup.action == "add") {
+
+            const opt = require("./option.json")
+            if(opt.newmem == null) return
+            const getPesan = opt.newmem[grup.id]
+            if(getPesan == null) return
+            sock.sendMessage(grup.id, {
+                text : getPesan
+            })
+        } else if(grup.action == "remove") {
+            sock.sendMessage(grup.id, {
+                text : "Selamat Jalan @"+grup.author.split("@").at(0),
+                mentions : grup.participants
+            }, {
+                
+            })
+        }
     })
     sock.ev.on('messages.upsert', (m) => {
         

@@ -17,7 +17,8 @@ export default async function Hello(socket: WASocket, {
     pengirim_nama,
     pengirim,
     isGroup,
-    messageInstance
+    messageInstance,
+    mentions
 }: messageType) {
     if(pesan.length == 0) throw "Tidak ada pertanyaannya"
     const rands = Math.floor(Math.random() * (3 - 1 + 1) + 1);
@@ -29,15 +30,11 @@ export default async function Hello(socket: WASocket, {
     } else {
         hasil = "Ya"
     }
-    const mention = [pengirim]
     
-    const mentions = messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]
-    if(mentions != null) {
-        mention.push(...mentions)
-    }
+   
     await socket.sendMessage(room, {
         text : `Pertanyaan : Apakah ${pesan.join(" ")}\n\nJawaban : ${hasil}`,
-        mentions : mention,
+        mentions : mentions,
         
     },
     {

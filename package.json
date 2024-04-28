@@ -17,6 +17,7 @@
     "link-preview-js": "^3.0.4",
     "node-fetch": "^3.3.0",
     "number-to-arabic-words": "^1.5.3",
+    "osu-api-extended": "^2.8.4",
     "qrcode-terminal": "^0.12.0",
     "spotify-web-api-node": "^5.0.2",
     "uuid": "^9.0.0"

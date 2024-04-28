@@ -30,6 +30,7 @@ export default async function Sticker(socket: WASocket, {
     quoted_type,
     quoted
 }: messageType) {
+    console.log(quoted_type)
     if(quoted_type != null) {
         if(quoted_type != "imageMessage") {
             return await socket.sendMessage(room, {text : "Bukan Gambar"})
@@ -41,6 +42,7 @@ export default async function Sticker(socket: WASocket, {
     const messageTemp:proto.IWebMessageInfo = quoted != null ?  convertQuoted2MsgInfo(messageInstance) : messageInstance
     const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
     const nama = uuidv4()
+    console.log(buffer)
     const file = nama+"."+messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1)
     if(!fs.existsSync("media/temp")) {
         fs.mkdirSync("media/temp")
