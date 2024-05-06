@@ -5,7 +5,8 @@ export const types = /pp/i
 export const nama = "PP"
 export const kategori = "Fun"
 export const bantuan = [
-    getOptions()?.prefix + "pp"
+    getOptions()?.prefix + "pp",
+    getOptions()?.prefix + "pp grup",
 ]
 export const isGroup = false
 export const isAdmin = false
@@ -18,10 +19,9 @@ export default async function Hello(socket: WASocket, {
     pengirim,
     isGroup,
 }: messageType) {
-    if (pesan[0] != null && pesan.length == 1) {
+    if (pesan.length == 1) {
         try {
-
-            const ppUrl = await socket.profilePictureUrl(pesan[0].trim().split("@").join("") + "@s.whatsapp.net", "image")
+            const ppUrl = await socket.profilePictureUrl(pesan[0] == "grup" ?  room : pesan[0].trim().split("@").join("") + "@s.whatsapp.net", "image") 
             await socket.sendMessage(room, { image: { url: ppUrl || "" }, caption: "Berhasil mengirimkan pp dari " + pesan[0], mentions: [pesan[0].split("@").join("") + "@s.whatsapp.net"] })
 
         } catch (err) {

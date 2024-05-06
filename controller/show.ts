@@ -25,7 +25,8 @@ export default async function Hello(socket: WASocket, {
     try {
 
         if (quoted_type == null) throw "Harus mengquoted Pesan"
-        if (messageInstance.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2 == null) throw "Harus Pesan Yang hanay bisa dilihat sekali"
+        const messis = messageInstance.message?.ephemeralMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2|| messageInstance.message?.ephemeralMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.ephemeralMessage?.message?.viewOnceMessageV2  || messageInstance.message?.extendedTextMessage?.contextInfo?.quotedMessage?.viewOnceMessageV2 
+        if (messis == null) throw "Harus Pesan Yang hanya bisa dilihat sekali"
         if (quoted_type == "imageMessage") {
             const messageTemp: proto.IWebMessageInfo = convertQuoted2MsgInfo(messageInstance)
             const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
@@ -52,8 +53,8 @@ export default async function Hello(socket: WASocket, {
         }
 
     } catch (err) {
-        console.log(err)
-        if (err instanceof Error) {
+        console.log(typeof err)
+        if (typeof err == "string") {
             throw err
         }
 

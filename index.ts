@@ -74,7 +74,7 @@ async function connectToWhatsApp () {
     sock.ev.on("messages.delete",(m) => {
         console.log(m)
     })
-    sock.ev.on("group-participants.update", (grup) => {
+    sock.ev.on("group-participants.update", async(grup) => {
         console.log(grup)
         if(grup.action == "add") {
 
@@ -86,12 +86,8 @@ async function connectToWhatsApp () {
                 text : getPesan
             })
         } else if(grup.action == "remove") {
-            sock.sendMessage(grup.id, {
-                text : "Selamat Jalan @"+grup.author.split("@").at(0),
-                mentions : grup.participants
-            }, {
-                
-            })
+            const ppUrl = await sock.profilePictureUrl(grup.author, "image")
+            sock.sendMessage(grup.id, { image: { url: ppUrl || "" }, caption:"Selamat Jalan @"+grup.author.split("@").at(0), mentions: grup.participants})
         }
     })
     sock.ev.on('messages.upsert', (m) => {
