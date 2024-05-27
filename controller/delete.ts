@@ -5,7 +5,7 @@ import convertQuoted2MsgInfo2 from '../util/convertQuoted2MsgInfo2';
 import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
 export const types = /delete/i
 export const nama = "Delete"
-export const kategori = "Grub"
+export const kategori = "Group"
 export const bantuan = [
     getOptions()?.prefix+"delete"
 ]

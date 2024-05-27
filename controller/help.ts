@@ -19,11 +19,12 @@ export default async function Help(socket: WASocket, {
     pengirim,
     isGroup,
 }: messageType) {
-    console.log(kategoris)
-    const text = Object.keys(kategoris).map(el => {
+    const kat = kategoris()
+    console.log(kat)
+    const text = Object.keys(kat).map(el => {
         let tempText = ""
         tempText = `*${el}*\n`
-        kategoris[el].forEach(el2 => {
+        kat[el].forEach(el2 => {
             tempText += el2+"\n"
         })
         return tempText

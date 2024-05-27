@@ -3,7 +3,7 @@ import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 export const types = /link/i
 export const nama = "Link"
-export const kategori = "Grub"
+export const kategori = "Group"
 export const bantuan = [
     getOptions()?.prefix+"link"
 ]

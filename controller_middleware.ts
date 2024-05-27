@@ -82,7 +82,7 @@ export default async function MiddlewareController(message: {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
         sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0].admin || "")  
     }
-    for(let el of ControllerFunctions) {
+    for(let el of ControllerFunctions()) {
         console.log(el.types)
         if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) continue;
         

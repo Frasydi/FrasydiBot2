@@ -1,15 +1,29 @@
 import * as fs from "fs"
-const Files = fs.readdirSync("./controller")
-export const kategoris : {[key:string] : Array<String>} = {}
-const ControllerFunctions = Files.map(el => {
-    if(!el.endsWith(".ts")) return 
-    const file = require("./controller/"+el)
-    if(!Object.keys(kategoris).includes(file.kategori)) {
-        kategoris[file.kategori] = []
-    }
-    kategoris[file.kategori].push(`${file.nama} ${file.isGroup ? "(Group Only)" : ""} ${file.isAdmin ? "(Admin Group Only)" : ""} : ${file.bantuan.join(", ")}`)
-    return file
-})
+export const kategoris = () => {
+    const Files = fs.readdirSync("./controller")
+    const result: { [key: string]: Array<String> } = {}
+    Files.forEach(el => {
+        if (!el.endsWith(".ts")) return
+        delete require.cache[require.resolve("./controller/"+el)];
+        const file = require("./controller/" + el)
+        if (!Object.keys(result).includes(file.kategori)) {
+            result[file.kategori] = []
+            
+        }
+        result[file.kategori].push(`${file.nama} ${file.isGroup ? "(Group Only)" : ""} ${file.isAdmin ? "(Admin Group Only)" : ""} : ${file.bantuan.join(", ")}`)
+    })
+    return result
+}
+const ControllerFunctions = () => {
+    const Files = fs.readdirSync("./controller")
+    return Files.map(el => {
+        if (!el.endsWith(".ts")) return
+        delete require.cache[require.resolve("./controller/"+el)];
+        const file = require("./controller/" + el)
+        return file
+    })
+    
+}
 
-console.log(ControllerFunctions)
+console.log(ControllerFunctions())
 export default ControllerFunctions
