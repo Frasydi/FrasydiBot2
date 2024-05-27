@@ -87,7 +87,7 @@ async function connectToWhatsApp () {
             })
         } else if(grup.action == "remove") {
             const ppUrl = await sock.profilePictureUrl(grup.author, "image")
-            sock.sendMessage(grup.id, { image: { url: ppUrl || "" }, caption:"Selamat Jalan @"+grup.author.split("@").at(0), mentions: grup.participants})
+            sock.sendMessage(grup.id, { image: { url: ppUrl || "" }, caption:"@"+grup.author.split("@").at(0) + " Meninggalkan Grub", mentions: grup.participants})
         }
     })
     sock.ev.on('messages.upsert', (m) => {
