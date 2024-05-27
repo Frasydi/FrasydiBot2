@@ -27,7 +27,11 @@ export default async function MiddlewareController(message: {
     type: MessageUpsertType;
 }, socket: WASocket) {
     const isGroup = message.messages?.[0].key?.participant != null
-    const pesan = message.messages[0].message?.conversation ||message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text || message.messages[0].message?.listResponseMessage?.singleSelectReply?.selectedRowId|| message.messages[0].message?.buttonsResponseMessage?.selectedButtonId || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
+    const pesan = message.messages[0].message?.conversation||
+    message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text 
+    || message.messages[0].message?.listResponseMessage?.singleSelectReply?.selectedRowId
+    || message.messages[0].message?.buttonsResponseMessage?.selectedButtonId 
+    || message.messages[0].message?.extendedTextMessage?.text || message.messages[0].message?.imageMessage?.caption
     const quoted = message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.ephemeralMessage?.message?.viewOnceMessageV2?.message
     ||message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage?.ephemeralMessage?.message
     ||message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage 
@@ -76,7 +80,7 @@ export default async function MiddlewareController(message: {
     }
     if (isGroup) {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
-        sending.isAdmin = sending.anggota.filter(el => el.id == sending.pengirim)[0].admin == "admin"
+        sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0].admin || "")  
     }
     for(let el of ControllerFunctions) {
         console.log(el.types)

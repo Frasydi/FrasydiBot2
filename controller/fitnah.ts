@@ -24,12 +24,12 @@ export default async function Fitnah(socket: WASocket, {
     messageInstance,
     quoted
 }: messageType) {
-    if(pesan.length < 2) return await socket.sendMessage(room, {text : "Kontak dan isi fitnah kosong"})
-    if(pesan.slice(1).join(" ").trim().length == 0) return await socket.sendMessage(room, {text : "Isi fitnah kosong"})
-    console.log(pesan.join(" "))
-    console.log(messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid)
+    if(pesan.length < 2) throw "Kontak dan isi fitnah kosong"
+    if(pesan.slice(1).join("").trim().length == 0) throw "Isi fitnah kosong"
     
-    await socket.sendMessage(room, {text : "",  mentions : messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]}, {quoted : {
+    await socket.sendMessage(room, {text : "",  
+    mentions : messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid as string[]}, 
+    {quoted : {
         key : {
             remoteJid : room,
             id : uuidv4(),
@@ -42,4 +42,10 @@ export default async function Fitnah(socket: WASocket, {
             }}
         }
     }, })
+    try {
+        await socket.sendMessage(room, { delete: messageInstance.key })
+    }catch(err) {
+        
+    }
+
 }

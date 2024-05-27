@@ -6,6 +6,7 @@ import AzanNotification from './util/azanNotification';
 import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
 import { group } from 'console';
 import convertTel from './util/convertTel';
+import * as path from "path"
 dotenv.config()
 const store = makeInMemoryStore({ 
    
@@ -26,7 +27,6 @@ async function connectToWhatsApp () {
         browser: Browsers.macOS('Desktop'),
         auth : state,
         getMessage : async(key) => {
-            console.log(key)
             const message = await store.loadMessage(key.remoteJid as string, key.id as string)
             return message as proto.IMessage | undefined
         },
@@ -78,7 +78,8 @@ async function connectToWhatsApp () {
         console.log(grup)
         if(grup.action == "add") {
 
-            const opt = require("./option.json")
+            const opt =  JSON.parse(fs.readFileSync(path.resolve(__dirname, "./option.json"), "utf-8").toString())
+            console.log(opt)
             if(opt.newmem == null) return
             const getPesan = opt.newmem[grup.id]
             if(getPesan == null) return
