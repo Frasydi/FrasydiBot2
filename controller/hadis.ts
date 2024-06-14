@@ -24,6 +24,7 @@ export default async function Hadis(socket: WASocket, {
     try {
 
         if(pesan.length == 0) {
+            
             const fet = await axios.get("https://api.hadith.gading.dev/books")
             const data = fet.data
             const books = data.data.map((el:any, ind:number) => `${ind+1}. ${el.name}(${el.id}) : ${el.available}`).join("\n")

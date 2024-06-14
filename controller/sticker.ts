@@ -9,6 +9,7 @@ import saveMedia from '../util/saveMedia';
 import {v4 as uuidv4} from 'uuid';
 import * as fs from 'fs'
 import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
+import imageSize from 'image-size';
 export const types = /sticker/i
 export const nama = "Sticker"
 export const kategori = "Tools"
@@ -51,11 +52,14 @@ export default async function Sticker(socket: WASocket, {
         fs.writeFileSync("media/temp/"+file, buffer as Buffer)
         childprocess.execSync(`cwebp -q 90 ${"media/temp/"+file} -o ${"media/temp/"+nama+".webp"}`)
     }catch(err) {
+        console.log(err)
        return await socket.sendMessage(room, {text : "Ada masalah"})
     }
     
     try {
-        await socket.sendMessage(room, {sticker : {url : "media/temp/"+nama+".webp"}})
+        const fileSize = imageSize("media/temp/"+nama+".webp")
+        console.log(fileSize)
+        await socket.sendMessage(room, {sticker : {url : "media/temp/"+nama+".webp"}, fileName :"Sticker Frasydi Bot", height : fileSize.height, width : fileSize.width})
     }catch(err) {
         console.log(err)
         return await socket.sendMessage(room, {text : "Ada masalah"})

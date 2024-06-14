@@ -24,8 +24,14 @@ export default async function Hello(socket: WASocket, {
     if(text.trim().length == 0) throw "Harus mengisikan kode html"
     try {
         
+        console.log(text)
         const image = await nodeHtmlToImage({
-            html : text
+            html : text,
+            puppeteerArgs : {
+                headless : "new",
+                executablePath: '/usr/bin/chromium-browser',
+                args: ['--no-sandbox', '--disable-setuid-sandbox'],
+            }
         })
         
         await socket.sendMessage(room, {

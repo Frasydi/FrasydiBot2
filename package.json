@@ -1,8 +1,9 @@
 {
   "name": "whatsappbot",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "license": "MIT",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@google/generative-ai": "^0.8.0",
@@ -12,7 +13,9 @@
     "cwebp": "^3.1.0",
     "dotenv": "^16.0.3",
     "exact-math": "^2.2.3",
+    "google-play-scraper": "^10.0.0",
     "html-to-text": "^9.0.4",
+    "image-size": "^1.1.1",
     "imagemin": "^8.0.1",
     "link-preview-js": "^3.0.4",
     "node-fetch": "^3.3.0",
@@ -25,7 +28,7 @@
     "uuid": "^9.0.0"
   },
   "scripts": {
-    "start": "ts-node index.ts",
+    "start": "npx ts-node index.ts",
     "dev": "nodemon index.ts"
   },
   "devDependencies": {
