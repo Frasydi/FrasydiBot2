@@ -1,13 +1,12 @@
+require("fix-esm").register();
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
 import * as fs from "fs"
-import AzanNotification from './util/azanNotification';
 import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
-import { group } from 'console';
-import convertTel from './util/convertTel';
 import * as path from "path"
 dotenv.config()
+
 const store = makeInMemoryStore({ 
    
 })
@@ -72,6 +71,7 @@ async function connectToWhatsApp () {
     })
     
     sock.ev.on("messages.delete",(m) => {
+        console.log("Kena Hapus")
         console.log(m)
     })
     sock.ev.on("group-participants.update", async(grup) => {
@@ -97,7 +97,7 @@ async function connectToWhatsApp () {
         console.log(JSON.stringify(m, null, 2))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
-        })
+        }) 
     })
 
 }

@@ -20,12 +20,15 @@ export interface messageType {
     quoted? : proto.IMessage | null | undefined,
     message_type : msg_type,
     quoted_type? : msg_type,
-    mentions : string[]
+    mentions : string[],
+    isOwner : boolean
 }
 export default async function MiddlewareController(message: {
     messages: proto.IWebMessageInfo[];
     type: MessageUpsertType;
 }, socket: WASocket) {
+
+
     const isGroup = message.messages?.[0].key?.participant != null
     const pesan = message.messages[0].message?.conversation||
     message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text 
@@ -45,7 +48,6 @@ export default async function MiddlewareController(message: {
         mentions = [mentions]
     }
     const sending: messageType = {
-
         key: message.messages[0].key.id as string,
         fromMe: message.messages[0].key.fromMe as boolean,
         room: message.messages[0].key.remoteJid as string,
@@ -59,8 +61,19 @@ export default async function MiddlewareController(message: {
         quoted,
         kontak : [],
         message_type : msgType as unknown as msg_type,
-        mentions : mentions
+        mentions : mentions,
+        isOwner : false
     }
+
+    if(getOptions().ban != null) {
+        if((getOptions() as string[]).includes(sending.pengirim)) {
+            socket.sendMessage(sending.room, {
+                text :"Maaf anda sudah diblacklist untuk menggunakan bot ini"
+            })
+            return
+        }
+    }
+
     if(quoted != null) {
         sending.quoted_type = Object.keys((quoted) as object)[0] as msg_type
     }
@@ -81,7 +94,11 @@ export default async function MiddlewareController(message: {
     if (isGroup) {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
         sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0].admin || "")  
-    }
+    } 
+    
+    sending.isOwner = getOptions().owner == sending.pengirim
+
+    
     for(let el of ControllerFunctions()) {
         console.log(el.types)
         if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) continue;

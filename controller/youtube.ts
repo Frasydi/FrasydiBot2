@@ -10,6 +10,7 @@ export const kategori = "Tools";
 export const bantuan = [getOptions()?.prefix + "vdl [link] [audio/video]", "vdl [link] [audio/video] [username] [password]" ];
 export const isGroup = false;
 export const isAdmin = false;
+
 export default async function Youtube(
   socket: WASocket,
   { key, fromMe, pesan, room, pengirim_nama, pengirim, isGroup }: messageType

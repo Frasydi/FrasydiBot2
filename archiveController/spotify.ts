@@ -1,12 +1,12 @@
 import { proto } from "@whiskeysockets/baileys/WAProto";
 import { execSync } from "child_process";
 import { WASocket } from "@whiskeysockets/baileys";
-import { messageType } from "../src/controller_middleware";
-import { getOptions } from "../src/util/option";
+import { messageType } from "../controller_middleware";
+import { getOptions } from "../util/option";
 import SpotifyWebApi from "spotify-web-api-node";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-import removeDir from "../src/util/rmdir";
+import removeDir from "../util/rmdir";
 export const types = /spotify/i;
 export const nama = "spotify";
 export const kategori = "Fun";
