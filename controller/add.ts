@@ -30,6 +30,7 @@ export default async function kick(socket: WASocket, {
     try {
         const promise = newContact.map(async(el) => {
             console.log(el, "El kontak")
+            console.log(convertTel(el))
             await socket.groupParticipantsUpdate(room, [convertTel(el)], "add")
         })
         await Promise.all(promise)

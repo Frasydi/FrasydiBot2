@@ -1,7 +1,7 @@
 import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions, setOptions } from '../util/option';
-export const types = /unban/i
+export const types = /^unban$/i
 export const nama = "UnBan"
 export const kategori = "Owner"
 export const bantuan = [
@@ -37,7 +37,7 @@ export default async function Ban(socket: WASocket, {
 
     setOptions(mentionsData.filter(el => el != mentions[0]), "ban")
     await socket.sendMessage(room, {
-        text : `Berhasil Memban`,
+        text : `Berhasil unban`,
         mentions : [pengirim]
     })
 }

@@ -115,6 +115,7 @@ export default async function spotify(
       );
     } catch (err) {
       console.log("Test");
+      throw "Ada Masalah"
     }
     await socket.sendMessage(
       room,

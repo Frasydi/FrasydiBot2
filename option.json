@@ -8,12 +8,172 @@
       "kode": 930
     }
   ],
+  "ban": [],
   "newmem": {
-    "6283830003384-1623383845@g.us": "Yang dihamilin chat owner",
-    "120363026138625122@g.us": "*Pertanyaan : Apa perbedaan di antara kedua gambar ini?*\nJawaban :  Perbedaannya adalah gambar pertama adalah tangkapan layar dari game Mobile Legends, sedangkan gambar kedua adalah tangkapan layar dari aplikasi Instagram.",
-    "120363044711969104@g.us": "Fitur ini hanya boleh digunakan oleh admin"
+    "6283830003384-1623383845@g.us": {
+      "message": "Selamat Datang di grub ini",
+      "image": "6283830003384-1623383845@g.us.webp"
+    }
   },
-  "ban": [
-    "6282189137669@s.whatsapp.net"
-  ]
+  "restrict": {
+    "6283830003384-1623383845@g.us": [
+      "628999231683@s.whatsapp.net"
+    ]
+  },
+  "rpg": {
+    "6282239437989@s.whatsapp.net": {
+      "armor": {
+        "boot": null,
+        "chestplate": {
+          "nama": "Leather Chestplate",
+          "deskripsi": "Hanya Sebuah Chestplate biasa",
+          "stats": {
+            "agi": 0,
+            "int": 0,
+            "lucky": 0,
+            "strength": 0,
+            "vit": 1
+          },
+          "tier": "E",
+          "type": "chestplate",
+          "id": 3,
+          "tipe": "armor",
+          "max_stack": 10
+        },
+        "helmet": null,
+        "leggings": null
+      },
+      "experience": 21,
+      "health": 100,
+      "max_health": 100,
+      "max_experience": 300,
+      "items": [
+        {
+          "nama": "Health Potion S",
+          "deskripsi": "Sebuah Potion untuk menambahkan HP pemain sebesar 50",
+          "max_stack": 100,
+          "tier": "E",
+          "tipe": "potion",
+          "id": 1,
+          "stack": 7
+        },
+        {
+          "nama": "Experience Potion S",
+          "deskripsi": "Sebuah Potion untuk menambahkan EXP pemain sebesar 50",
+          "max_stack": 10,
+          "tier": "D",
+          "tipe": "potion",
+          "id": 2,
+          "stack": 3
+        }
+      ],
+      "level": 1,
+      "money": 500,
+      "ras": "manusia",
+      "stats": {
+        "agi": 2,
+        "int": 4,
+        "lucky": 5,
+        "strength": 3,
+        "vit": 2
+      },
+      "statsPoin": 3,
+      "weapon": {
+        "nama": "Wooden Sword",
+        "deskripsi": "Hanya Sebuah Pedang Kayu",
+        "stats": {
+          "agi": 0,
+          "int": 0,
+          "lucky": 0,
+          "strength": 1,
+          "vit": 0
+        },
+        "tier": "E",
+        "id": 4,
+        "tipe": "weapons",
+        "max_stack": 10
+      },
+      "location": 1,
+      "advTimeOut": 1721418866583
+    },
+    "6282393417774@s.whatsapp.net": {
+      "armor": {
+        "boot": null,
+        "chestplate": {
+          "nama": "Leather Chestplate",
+          "deskripsi": "Hanya Sebuah Chestplate biasa",
+          "stats": {
+            "agi": 0,
+            "int": 0,
+            "lucky": 0,
+            "strength": 0,
+            "vit": 1
+          },
+          "tier": "E",
+          "type": "chestplate",
+          "id": 3,
+          "tipe": "armor",
+          "max_stack": 10,
+          "cost": 20
+        },
+        "helmet": null,
+        "leggings": null
+      },
+      "experience": 10.2,
+      "health": 100,
+      "max_health": 100,
+      "max_experience": 300,
+      "items": [
+        {
+          "nama": "Health Potion S",
+          "deskripsi": "Sebuah Potion untuk menambahkan HP pemain sebesar 50",
+          "max_stack": 100,
+          "tier": "E",
+          "tipe": "potion",
+          "id": 1,
+          "cost": 20,
+          "stack": 6
+        },
+        {
+          "nama": "Experience Potion S",
+          "deskripsi": "Sebuah Potion untuk menambahkan EXP pemain sebesar 50",
+          "max_stack": 10,
+          "tier": "D",
+          "tipe": "potion",
+          "id": 2,
+          "cost": 20,
+          "stack": 3
+        }
+      ],
+      "level": 1,
+      "money": 500,
+      "ras": "elf",
+      "stats": {
+        "agi": 4,
+        "int": 6,
+        "lucky": 2,
+        "strength": 3,
+        "vit": 2
+      },
+      "statsPoin": 3,
+      "weapon": {
+        "nama": "Wooden Sword",
+        "deskripsi": "Hanya Sebuah Pedang Kayu",
+        "stats": {
+          "agi": 0,
+          "int": 0,
+          "lucky": 0,
+          "strength": 1,
+          "vit": 0
+        },
+        "tier": "E",
+        "id": 4,
+        "tipe": "weapons",
+        "max_stack": 10,
+        "cost": 20
+      },
+      "location": 1,
+      "advTimeOut": 1721405108527
+    }
+  }
 }

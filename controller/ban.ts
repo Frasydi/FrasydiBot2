@@ -1,7 +1,7 @@
 import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions, setOptions } from '../util/option';
-export const types = /ban/i
+export const types = /^ban$/i
 export const nama = "Ban"
 export const kategori = "Owner"
 export const bantuan = [

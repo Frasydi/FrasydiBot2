@@ -7,6 +7,7 @@ import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, use
 import * as path from "path"
 dotenv.config()
 
+
 const store = makeInMemoryStore({ 
    
 })
@@ -52,6 +53,9 @@ async function connectToWhatsApp () {
             return message;
         },
     })
+
+    if(sock == null) return
+
     store.bind(sock.ev)
     
     
@@ -83,22 +87,38 @@ async function connectToWhatsApp () {
             if(opt.newmem == null) return
             const getPesan = opt.newmem[grup.id]
             if(getPesan == null) return
-            sock.sendMessage(grup.id, {
-                text : getPesan
+            if(getPesan.image != null) {
+                sock?.sendMessage(grup.id, {
+                    image : {
+                    url : "media/newmem/"+getPesan.image
+                    },
+                    caption : getPesan.message
+                })
+                return
+            }
+            sock?.sendMessage(grup.id, {
+                text : getPesan.message
             })
         } else if(grup.action == "remove") {
             const ppUrl = await sock.profilePictureUrl(grup.author, "image")
-            sock.sendMessage(grup.id, { image: { url: ppUrl || "" }, caption:"@"+grup.author.split("@").at(0) + " Meninggalkan Grub", mentions: grup.participants})
+            sock?.sendMessage(grup.id, {text:"@"+grup.author.split("@").at(0) + " Meninggalkan Grub", mentions: grup.participants})
         }
     })
     sock.ev.on('messages.upsert', (m) => {
-        
         if(m.type == "append") return
-        console.log(JSON.stringify(m, null, 2))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         }) 
     })
 
+    return sock
+
 }
-connectToWhatsApp()
+const sock = connectToWhatsApp() 
+
+async function getSock() {
+    const newSock = await sock
+    return newSock
+} 
+
+export {getSock}
