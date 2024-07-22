@@ -67,7 +67,7 @@ export default async function AI(socket: WASocket, {
             })
 
         }
-        const model = genAI.getGenerativeModel({ model: message_type == 'imageMessage' || (quoted != null && ["imageMessage", "stickerMessage"].includes(quoted_type as any)) ? "gemini-pro-vision" : "gemini-pro", 
+        const model = genAI.getGenerativeModel({ model: message_type == 'imageMessage' || (quoted != null && ["imageMessage", "stickerMessage"].includes(quoted_type as any)) ? "gemini-1.5-flash" : "gemini-1.5-flash", 
             safetySettings : [
                 {
                     category : HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT,

@@ -332,12 +332,23 @@ export function myProfileRPG(from : string) {
     "HP : "+myrpg.health + "/"+ (myrpg.max_health * ((myrpg.stats.vit + 100)/ 100))+"\n"+
     "Level : "+myrpg.level +"\n"+
     "Exp : "+myrpg.experience +"/"+myrpg.max_experience+"\n\n"+
-    "Stats Poin : "+ myrpg.statsPoin+"\n"
+    "Stats Poin : "+ myrpg.statsPoin+"\n"+
     "Stats \n\t"+
-    `agi: ${myrpg.stats.agi}\ntint: ${myrpg.stats.int}\ntlucky: ${myrpg.stats.lucky}\ntstrength: ${myrpg.stats.strength}\ntvit: ${myrpg.stats.vit}\n`+
+    `agi: ${myrpg.stats.agi}\n\tint: ${myrpg.stats.int}\n\tlucky: ${myrpg.stats.lucky}\n\tstrength: ${myrpg.stats.strength}\n\tvit: ${myrpg.stats.vit}\n`+
     ""
 
     return text
+}
+
+export function useStatsPoin(from : string, statKey : keyof Playerstatus, jumlah : number ) {
+    const myrpg = getMyRPGPlayer(from)
+    if(myrpg.statsPoin < jumlah) {
+        throw "Stat Poin Yang Ingin Digunakan kurang. Anda Memiliki "+myrpg.statsPoin+" stats poin"
+    }
+    myrpg.stats[statKey] += jumlah;
+    myrpg.statsPoin -= jumlah
+    setRpgPlayer(from, myrpg)
+    throw "Anda Berhasil Menggunakan Stat Poin Anda"
 }
 
 export function adventure(from: string) {
@@ -353,7 +364,7 @@ export function adventure(from: string) {
 
 
 
-        throw "Anda Bisa Melakukan Eksplore lagi dalam " +`${differenceInHours} jam : ${differenceInMinutes} menit : ${differenceInSeconds} detik`
+        throw "Anda Bisa Melakukan Eksplore lagi dalam " +`${differenceInHours} jam : ${differenceInMinutes} menit : ${differenceInSeconds % 60} detik`
     }
     if (travels[myrpg.location].isSafeArea == true) {
         throw "Area ini (" + travels[myrpg.location].name + ") tidak dapat diexplore"
@@ -409,8 +420,9 @@ export function useItem(from : string, id : number) {
     if(!["potion", "common" ].includes(myrpg.items[indFind].tipe )) {
         throw "Hanya Potion dan Item Common yang bisa digunakan"
     }
-    const item  = myrpg.items[indFind] as potionscommon
-    console.log(item)
+    const itemGlobalInd = items.findIndex(el => el.id == id)
+
+    const item  = items[itemGlobalInd] as potionscommon
     const result = item.kegunaan(myrpg)
     myrpg.items[indFind].stack--
     if(myrpg.items[indFind].stack <= 0) {

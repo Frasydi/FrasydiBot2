@@ -17,7 +17,8 @@
   },
   "restrict": {
     "6283830003384-1623383845@g.us": [
-      "628999231683@s.whatsapp.net"
+      "628999231683@s.whatsapp.net",
+      "6281261933204@s.whatsapp.net"
     ]
   },
   "rpg": {
@@ -43,10 +44,10 @@
         "helmet": null,
         "leggings": null
       },
-      "experience": 21,
+      "experience": 452.5,
       "health": 100,
       "max_health": 100,
-      "max_experience": 300,
+      "max_experience": 600,
       "items": [
         {
           "nama": "Health Potion S",
@@ -55,29 +56,20 @@
           "tier": "E",
           "tipe": "potion",
           "id": 1,
-          "stack": 7
-        },
-        {
-          "nama": "Experience Potion S",
-          "deskripsi": "Sebuah Potion untuk menambahkan EXP pemain sebesar 50",
-          "max_stack": 10,
-          "tier": "D",
-          "tipe": "potion",
-          "id": 2,
-          "stack": 3
+          "stack": 10
         }
       ],
-      "level": 1,
+      "level": 2,
       "money": 500,
       "ras": "manusia",
       "stats": {
-        "agi": 2,
+        "agi": 4,
         "int": 4,
-        "lucky": 5,
-        "strength": 3,
-        "vit": 2
+        "lucky": 8,
+        "strength": 4,
+        "vit": 5
       },
-      "statsPoin": 3,
+      "statsPoin": 0,
       "weapon": {
         "nama": "Wooden Sword",
         "deskripsi": "Hanya Sebuah Pedang Kayu",
@@ -94,7 +86,7 @@
         "max_stack": 10
       },
       "location": 1,
-      "advTimeOut": 1721418866583
+      "advTimeOut": 1721457289589
     },
     "6282393417774@s.whatsapp.net": {
       "armor": {
@@ -174,6 +166,30 @@
       },
       "location": 1,
       "advTimeOut": 1721405108527
+    }
+  },
+  "wordle": {
+    "6283830003384-1623383845@g.us": {
+      "answer": "scent",
+      "attempt": 7,
+      "attemptText": [
+        "srtyu",
+        "srtyt",
+        "smart",
+        "smurt",
+        "start",
+        "sweet",
+        "scent"
+      ],
+      "date": "2024-06-20",
+      "hint": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ],
+      "winner": "6282189137669@s.whatsapp.net"
     }
   }
 }
