@@ -31,7 +31,6 @@ export default async function Sticker(socket: WASocket, {
     quoted_type,
     quoted
 }: messageType) {
-    console.log(quoted_type)
     if(quoted_type != null) {
         if(quoted_type != "imageMessage") {
             return await socket.sendMessage(room, {text : "Bukan Gambar"})

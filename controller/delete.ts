@@ -22,10 +22,16 @@ export default async function Hello(socket: WASocket, {
     messageInstance,
     mentions,
     isAdmin,
-    quoted
+    quoted,
+    isOwner
+    
 }: messageType) {
     if(quoted == null) throw "Harus mengquoted pesan yang ingin dihapus"
     if(!isGroup) throw "Harus Di Grub"
-    if(!isAdmin) throw "Harus Admin"
+    if(!isAdmin ) {
+        if(!isOwner) {
+            throw "Harus Admin"
+        }
+    }
     await socket.sendMessage(room, { delete: convertQuoted2MsgInfo(messageInstance).key })
 }

@@ -20,8 +20,10 @@ export default async function Hello(socket: WASocket, {
     isGroup,
     quoted,
     quoted_type,
-    messageInstance
+    messageInstance,
+    isOwner
 }: messageType) {
+    if(!isOwner) throw "Hanya Owner"
     try {
 
         if (quoted_type == null) throw "Harus mengquoted Pesan"
