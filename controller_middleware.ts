@@ -22,7 +22,8 @@ export interface messageType {
     message_type: msg_type,
     quoted_type?: msg_type,
     mentions: string[],
-    isOwner: boolean
+    isOwner: boolean,
+    isSpecial : boolean
 }
 export default async function MiddlewareController(message: {
     messages: proto.IWebMessageInfo[];
@@ -66,7 +67,8 @@ export default async function MiddlewareController(message: {
         kontak: [],
         message_type: msgType as unknown as msg_type,
         mentions: mentions,
-        isOwner: false
+        isOwner: false,
+        isSpecial : false
     }
 
     if (getOptions().restrict != null) {
@@ -133,8 +135,13 @@ export default async function MiddlewareController(message: {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
         sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0].admin || "")
     }
+    
 
-    sending.isOwner = getOptions().owner == sending.pengirim
+    sending.isOwner = getOptions().owner.includes(sending.pengirim)
+    const specperm = getOptions().specialpermission
+    if(specperm != null) {
+        sending.isSpecial = specperm.includes(sending.pengirim)
+    }
 
 
     for (let el of ControllerFunctions()) {

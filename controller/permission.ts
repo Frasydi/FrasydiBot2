@@ -1,7 +1,7 @@
 import { WASocket } from '@whiskeysockets/baileys';
 import ControllerFunctions, { kategoris } from '../controller_add';
 import { messageType } from '../controller_middleware';
-import { getOptions } from '../util/option';
+import { getOptions, setOptions } from '../util/option';
 export const types = /permission/i
 export const nama = "Permission"
 export const kategori = "Owner"
@@ -38,5 +38,8 @@ function addPermission(val : string[]) {
     const specialpermission : string[] = opt.specialpermission
 
     specialpermission.push(...val)
+
+    setOptions(specialpermission, "specialpermission")
+
 }
 

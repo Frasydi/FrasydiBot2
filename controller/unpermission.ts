@@ -1,7 +1,7 @@
 import { WASocket } from '@whiskeysockets/baileys';
 import ControllerFunctions, { kategoris } from '../controller_add';
 import { messageType } from '../controller_middleware';
-import { getOptions } from '../util/option';
+import { getOptions, setOptions } from '../util/option';
 export const types = /unpermission/i
 export const nama = "Unpermission"
 export const kategori = "Owner"
@@ -38,5 +38,8 @@ function removePermission(val : string[]) {
     const specialpermission : string[] = opt.specialpermission
 
     specialpermission.filter(el => !val.includes(el))
+
+    setOptions(specialpermission, "specialpermission")
+
 }
 

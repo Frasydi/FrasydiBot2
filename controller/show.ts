@@ -21,9 +21,12 @@ export default async function Hello(socket: WASocket, {
     quoted,
     quoted_type,
     messageInstance,
-    isOwner
+    isOwner,
+    isSpecial
 }: messageType) {
-    if(!isOwner) throw "Hanya Owner"
+    if(!isOwner ) {
+        if(!isSpecial) throw "Hanya Orang yang memiliki akses spesial"
+    }
     try {
 
         if (quoted_type == null) throw "Harus mengquoted Pesan"
