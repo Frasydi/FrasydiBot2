@@ -19,11 +19,17 @@ export default async function demote(socket: WASocket, {
     pengirim_nama,
     pengirim,
     isGroup,
-    isAdmin
+    isAdmin,
+    isOwner
 }: messageType) {
 
     if(!isGroup) return await socket.sendMessage(room, {text : "Harus Group"})
-    if(!isAdmin) return await socket.sendMessage(room, {text : "Harus Admin"})
+        if(!isAdmin) {
+            if(!isOwner) {
+                await socket.sendMessage(room, {text : "Harus Admin"})
+            }
+            
+        }
     if(pesan.join(" ").trim().length == 0)return await socket.sendMessage(room, {text : "Harus Ada Kontak"})
     await socket.groupParticipantsUpdate(room, pesan.map(el => convertTel(el)), "demote")
     await socket.sendMessage(room, {text : "Berhasil Demote "+pesan.join(" "), mentions : getMentions(pesan.join(" "))})
