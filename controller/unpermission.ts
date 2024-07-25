@@ -31,7 +31,7 @@ export default async function Help(socket: WASocket, {
 
 function removePermission(val : string[]) {
     const opt = getOptions()
-    if(opt.specialpermission) {
+    if(opt.specialpermission == null) {
         opt.specialpermission = []
     }
 
