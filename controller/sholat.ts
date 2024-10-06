@@ -63,13 +63,7 @@ export default async function Sholat(
       await socket.sendMessage(room, {
         text: `Jadwal Sholat di Kota ${kota.nama} Hari ini\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
         footer: "Frasydi Bot",
-        buttons: [
-          {
-            buttonId: getOptions()?.prefix + "Sholat",
-            buttonText: { displayText: "Daftar Semua Kota" },
-            type: 1,
-          },
-        ],
+       
       });
 
       return;
@@ -94,13 +88,7 @@ export default async function Sholat(
     await socket.sendMessage(room, {
       text: `Jadwal Sholat di Kota ${data2.kota[0].nama} Hari ini\n\nSubuh : ${jadwal.subuh}\nDzuhur : ${jadwal.dzuhur}\nAshar : ${jadwal.ashar}\nMaghrib : ${jadwal.maghrib}\nIsya : ${jadwal.isya}\n`,
       footer: "Frasydi Bot",
-      buttons: [
-        {
-          buttonId: getOptions()?.prefix + "Sholat",
-          buttonText: { displayText: "Daftar Semua Kota" },
-          type: 1,
-        },
-      ],
+      
     });
   } catch (err) {
     console.log(err);
