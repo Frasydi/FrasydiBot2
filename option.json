@@ -1,6 +1,9 @@
 {
   "prefix": "/",
-  "owner": ["6282239437989@s.whatsapp.net", ""],
+  "owner": [
+    "6282239437989@s.whatsapp.net",
+    ""
+  ],
   "shalat": [
     {
       "room": "120363026138625122@g.us",
@@ -10,9 +13,9 @@
   ],
   "ban": [],
   "newmem": {
-    "6283830003384-1623383845@g.us": {
-      "message": "Yang begini dibilang kurang tobrut?",
-      "image": "6283830003384-1623383845@g.us.webp"
+    "120363314569955847@g.us": {
+      "message": "Peraturan Study Club ini\n\n1. Jangan menyombongkan kepintaranta(mau sebelum dan sesudah pembelajaran ini), rendah hatilah seolah-olah kita adalah manusia yang paling bodoh di dunia\n\n2. Jangan malu-malu bilang kalau lagi sakit. Yang sakit akan diajari di lain waktu.\n\n3. Usahakan beritahu kalau ada kendalata, jangan ikut pembelajaran jika ada hal yang urgen. Yang tidak hadir karena urgen akan diajari di lain waktu\n\n4. Usahakan tekun belajar",
+      "image": null
     }
   },
   "restrict": {
