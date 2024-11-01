@@ -25,8 +25,10 @@ export default async function NewMember(socket: WASocket, {
     isGroup,
     quoted,
     quoted_type,
-    messageInstance
+    messageInstance,
+    isAdmin
 }: messageType) {
+    if(!isAdmin) throw "Harus Admin"
     if (quoted == null) throw "Harus menquoted pesan untuk newmem"
     if (quoted_type == "videoMessage") throw "Harus Quoted pesan teks atau teks gambar saja"
     else if (quoted_type == "imageMessage") {

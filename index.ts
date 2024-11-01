@@ -11,10 +11,13 @@ dotenv.config()
 const store = makeInMemoryStore({ 
    
 })
+
 store.readFromFile('./baileys_store.json')
+
 setInterval(() => {
     store.writeToFile('./baileys_store.json')
 }, 10_000)
+
 if(!fs.existsSync("media")) {
     fs.mkdirSync("media")
 }
@@ -106,6 +109,7 @@ async function connectToWhatsApp () {
     })
     sock.ev.on('messages.upsert', (m) => {
         if(m.type == "append") return
+        console.log(JSON.stringify(m.messages))
         MiddlewareController(m, sock).catch(err => {
             console.log(err)
         }) 

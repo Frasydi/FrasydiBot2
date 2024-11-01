@@ -194,5 +194,15 @@
       ],
       "winner": "6282189137669@s.whatsapp.net"
     }
+  },
+  "penting": {
+    "typescript": {
+      "1": {
+        "file": "typescript/typescript-Modul TypeScript.pdf",
+        "text": "Modul TypeScript.pdf",
+        "type": "document",
+        "mimetype": ""
+      }
+    }
   }
 }

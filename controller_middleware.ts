@@ -56,7 +56,7 @@ export default async function MiddlewareController(message: {
         key: message.messages[0].key.id as string,
         fromMe: message.messages[0].key.fromMe as boolean,
         room: message.messages[0].key.remoteJid as string,
-        pesan: pesan?.split(" ").slice(1) || [],
+        pesan: pesan?.split(/\n/).map(el => "\n"+el).join(" ").split(" ").slice(1)  || [],
         pengirim: isGroup ? message.messages[0].key.participant as string : message.messages[0].key.remoteJid as string,
         isGroup: isGroup,
         anggota: [],
@@ -70,6 +70,7 @@ export default async function MiddlewareController(message: {
         isOwner: false,
         isSpecial : false
     }
+    console.log(pesan)
 
     if (getOptions().restrict != null) {
         const rest = getOptions().restrict as {
