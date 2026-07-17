@@ -66,9 +66,7 @@ export default async function AI(
     const url = res.data.data[0].url;
     const img = await axios.get(url, { responseType: 'arraybuffer' });
     const buffer = Buffer.from(img.data, 'binary');
-    fs.writeFileSync("media/"+name, buffer)
-    await socket.sendMessage(room, {image : {url : "media/"+name}})
-    fs.unlinkSync("media/"+name)
+    await socket.sendMessage(room, {image : buffer})
   } catch (err: any) {
     console.log(err);
     isLimit = false;

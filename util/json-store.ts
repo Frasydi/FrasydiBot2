@@ -1,5 +1,6 @@
 // auth/json-store.ts
 
+import { BufferJSON } from "@whiskeysockets/baileys";
 import fs from "fs/promises";
 import path from "path";
 
@@ -9,7 +10,7 @@ export class JsonStore {
     async read() {
         try {
             const data = await fs.readFile(FILE, "utf8");
-            return JSON.parse(data);
+            return JSON.parse(data, BufferJSON.reviver);
         } catch {
             return {};
         }
@@ -20,7 +21,7 @@ export class JsonStore {
 
         await fs.writeFile(
             FILE,
-            JSON.stringify(data, null, 2)
+            JSON.stringify(data, BufferJSON.replacer, 2)
         );
     }
 }

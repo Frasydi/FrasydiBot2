@@ -1,6 +1,5 @@
 import { downloadMediaMessage, WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
-import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
 import * as fs from "fs"
 import childprocess, { exec } from 'child_process';
 import { getOptions } from '../util/option';
@@ -126,9 +125,10 @@ export default async function Penting(socket: WASocket, {
             if (quoted_type == "videoMessage") throw "Harus Quoted pesan teks atau teks gambar saja"
             else if (quoted_type == "imageMessage") {
 
-                const buffer = await downloadMediaMessage(convertQuoted2MsgInfo(messageInstance), "buffer", {});
-                console.log(messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1))
-                const file = lab + "-" + pesan[1] + "." + messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1)
+                const messageTemp = { message: quoted, key: messageInstance.key }
+                const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
+                console.log(messageTemp.message?.imageMessage?.mimetype?.split("/").at(-1))
+                const file = lab + "-" + pesan[1] + "." + (messageTemp.message?.imageMessage?.mimetype?.split("/").at(-1) || "jpg")
                 if (!fs.existsSync("media/penting/" + lab)) {
                     fs.mkdirSync("media/penting/" + lab, {
                         recursive: true
@@ -149,14 +149,15 @@ export default async function Penting(socket: WASocket, {
                     file: lab + "/" + bab + ".webp",
                     text: quoted.imageMessage?.caption || quoted.conversation || "",
                     type: "image",
-                    mimetype: messageInstance.message?.imageMessage?.mimetype || ""
+                    mimetype: messageTemp.message?.imageMessage?.mimetype || ""
                 })
 
                 fs.unlinkSync("media/temp/penting" + file)
 
             } else if (quoted_type == "documentMessage") {
-                const buffer = await downloadMediaMessage(convertQuoted2MsgInfo(messageInstance), "buffer", {});
-                console.log(messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1));
+                const messageTemp = { message: quoted, key: messageInstance.key }
+                const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
+                console.log(messageTemp.message?.documentMessage?.mimetype?.split("/").at(-1));
                 const file = lab + "-" + quoted.documentMessage?.fileName;
 
                 if (!fs.existsSync("media/penting/" + lab)) {
@@ -179,7 +180,7 @@ export default async function Penting(socket: WASocket, {
                     file: lab + "/" + file,
                     text: quoted.documentMessage?.fileName || "test",
                     type: "document",
-                    mimetype: messageInstance.message?.documentMessage?.mimetype || ""
+                    mimetype: messageTemp.message?.documentMessage?.mimetype || ""
                 })
             } else {
 

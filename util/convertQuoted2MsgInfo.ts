@@ -6,5 +6,5 @@ export default function convertQuoted2MsgInfo(messageInstance : WAMessage):WAMes
     return {message : mess?.contextInfo?.quotedMessage, 
         key : {
             remoteJid : mess?.contextInfo?.participant,
-            id : messageInstance.message?.extendedTextMessage?.contextInfo?.stanzaId}}
+            id : mess?.contextInfo?.stanzaId}}
 }

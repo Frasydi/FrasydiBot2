@@ -1,4 +1,20 @@
 export default function convertTel(text : string) {
-    if(/@/i.test(text)) return text.split("@").at(1)?.trim()+"@s.whatsapp.net"
-    return text.replace(/0/i, "62")+"@s.whatsapp.net"
+    if (text.endsWith("@s.whatsapp.net") || text.endsWith("@lid")) {
+        return text;
+    }
+    if (text.includes("@lid")) {
+        return text.split("@")[0].replace(/\D/g, "") + "@lid";
+    }
+    // Strip everything except numbers
+    let clean = text.replace(/\D/g, "");
+    
+    // Check if the cleaned number matches LID length/prefix pattern
+    if (clean.length === 15 && clean.startsWith("9")) {
+        return clean + "@lid";
+    }
+
+    if (clean.startsWith("0")) {
+        clean = "62" + clean.slice(1);
+    }
+    return clean + "@s.whatsapp.net";
 }

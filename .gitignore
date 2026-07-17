@@ -4,3 +4,5 @@ baileys_store.json
 .env
 media/*
 lab.json
+db/*
+option.db

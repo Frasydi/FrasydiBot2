@@ -2,7 +2,6 @@ import { downloadMediaMessage, WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
 import { setNewMem } from '../util/newmemsetting';
-import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
 import * as fs from "fs"
 import childprocess from 'child_process';
 
@@ -32,9 +31,10 @@ export default async function NewMember(socket: WASocket, {
     if (quoted == null) throw "Harus menquoted pesan untuk newmem"
     if (quoted_type == "videoMessage") throw "Harus Quoted pesan teks atau teks gambar saja"
     else if (quoted_type == "imageMessage") {
-        const buffer = await downloadMediaMessage(convertQuoted2MsgInfo(messageInstance), "buffer", {});
-        console.log(messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1))
-        const file = room + "." + messageInstance.message?.imageMessage?.mimetype?.split("/").at(-1)
+        const messageTemp = { message: quoted, key: messageInstance.key }
+        const buffer = await downloadMediaMessage(messageTemp, "buffer", {});
+        console.log(messageTemp.message?.imageMessage?.mimetype?.split("/").at(-1))
+        const file = room + "." + (messageTemp.message?.imageMessage?.mimetype?.split("/").at(-1) || "jpg")
         if (!fs.existsSync("media/newmem")) {
             fs.mkdirSync("media/newmem")
         }

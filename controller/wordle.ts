@@ -37,7 +37,7 @@ export default async function Hello(socket: WASocket, {
 
             if(curWordle.winner != null) {
                 return await socket.sendMessage(room, {
-                    text : `Pertanyaan Wordle Hari ini sudah dijawab oleh ${"@" + curWordle.winner.replace("@s.whatsapp.net", "")}`+
+                    text : `Pertanyaan Wordle Hari ini sudah dijawab oleh ${"@" + curWordle.winner.replace("@lid", "")}`+
                     `\nJawaban : ${curWordle.answer} \n`+
                     `\nJumlah Percobaan : ${curWordle.attempt}`+
                     "\nPercobaan : \n\t"+

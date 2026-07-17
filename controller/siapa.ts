@@ -24,14 +24,20 @@ export default async function Hello(socket: WASocket, {
     if(pesan.length == 0) throw "Tidak ada pertanyaannya"
     if(!isGroup) throw "Harus Grub"
     console.log(anggota)
-    const hasil = Math.floor(Math.random() * (anggota.length - 0 + 1) + 0);
-    const mentions = [anggota[hasil].id]
+    if (anggota.length === 0) throw "Daftar anggota grup kosong"
+    const hasil = Math.floor(Math.random() * anggota.length);
+    const target = anggota[hasil];
+    const mentions = [target.id];
+    const targetAny = target as any;
+    if (targetAny.lid) {
+        mentions.push(targetAny.lid);
+    }
     const mentionsJid = messageInstance.message?.extendedTextMessage?.contextInfo?.mentionedJid
     if(mentionsJid != null) {
         mentions.push(...mentionsJid)
     }
     await socket.sendMessage(room, {
-        text : `Pertanyaan : Siapa ${pesan.join(" ")}\n\nJawaban : @${anggota[hasil].id.split("@")[0]}`,
-        mentions :mentions
+        text : `Pertanyaan : Siapa ${pesan.join(" ")}\n\nJawaban : @${target.id.split("@")[0]}`,
+        mentions : mentions
     })
 }

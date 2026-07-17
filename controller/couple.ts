@@ -20,8 +20,16 @@ export default async function Hello(socket: WASocket, {
     messageInstance,
     mentions
 }: messageType) {
-    if(pesan.length < 2) throw "Harus mentag orang yang dimaksud"
+    if(pesan.length < 1) throw "Harus mentag orang yang dimaksud"
     const rands = Math.floor(Math.random() * (100 - 0 + 1) + 0);
+    const cleanPengirim = pengirim.split(":")[0].split("@")[0];
+    if(pesan.length < 2) {
+        await socket.sendMessage(room, {
+            text : `Persentase Kecocokan antara ${pesan[0]} dan @${cleanPengirim}\n Adalah : ${rands}%`,
+            mentions : [pengirim, mentions[0]]
+        })
+        return;
+    }
     await socket.sendMessage(room, {
         text : `Persentase Kecocokan antara ${pesan[0]} dan ${pesan[1]}\n Adalah : ${rands}%`,
         mentions : [pengirim, ...mentions]

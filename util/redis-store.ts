@@ -1,3 +1,4 @@
+import { BufferJSON } from "@whiskeysockets/baileys";
 import Redis from "ioredis";
 
 export class RedisStore {
@@ -9,13 +10,13 @@ export class RedisStore {
 
         if (!value) return null;
 
-        return JSON.parse(value);
+        return JSON.parse(value, BufferJSON.reviver);
     }
 
     async write(key: string, data: any) {
         await this.redis.set(
             key,
-            JSON.stringify(data)
+            JSON.stringify(data, BufferJSON.replacer)
         );
     }
 

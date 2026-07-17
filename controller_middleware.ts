@@ -32,9 +32,11 @@ export default async function MiddlewareController(message: {
     messages: proto.IWebMessageInfo[];
     type: MessageUpsertType;
 }, socket: WASocket) {
+    if (!message.messages?.[0]?.message) {
+        return;
+    }
 
-
-    const isGroup = message.messages?.[0].key?.participant != null
+    const isGroup = message.messages?.[0].key?.remoteJid?.endsWith("@g.us") ?? false
 
     const pesan = message.messages[0].message?.conversation ||
         message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text
@@ -77,8 +79,10 @@ export default async function MiddlewareController(message: {
         isSpecial : false
     }
 
-    if (getOptions().restrict != null) {
-        const rest = getOptions().restrict as {
+    const middlewareOpts = getOptions(['restrict', 'ban', 'specialpermission']);
+
+    if (middlewareOpts.restrict != null) {
+        const rest = middlewareOpts.restrict as {
             [key: string]: string
         }
         if (rest[sending.room] != null) {
@@ -106,7 +110,7 @@ export default async function MiddlewareController(message: {
 
     }
 
-    if (!(pesan?.at(0) == getOptions().prefix as string)) {
+    if (!(pesan?.at(0) == middlewareOpts.prefix as string)) {
         if (!isGroup) {
             await chatAnonim(message.messages[0].key?.remoteJid || "", pesan || "")
         }
@@ -114,8 +118,8 @@ export default async function MiddlewareController(message: {
     }
 
 
-    if (getOptions().ban != null) {
-        if ((getOptions().ban as string[]).includes(sending.pengirim)) {
+    if (middlewareOpts.ban != null) {
+        if ((middlewareOpts.ban as string[]).includes(sending.pengirim)) {
             socket.sendMessage(sending.room, {
                 text: "Maaf anda sudah diblacklist untuk menggunakan bot ini"
             })
@@ -142,12 +146,12 @@ export default async function MiddlewareController(message: {
     }
     if (isGroup) {
         sending.anggota = await getGroupMetadata(sending.room as string, socket)
-        sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0].admin || "")
+        sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0]?.admin || "")
     }
     
 
-    sending.isOwner = getOptions().owner.includes(sending.pengirim)
-    const specperm = getOptions().specialpermission
+    sending.isOwner = middlewareOpts.owner.includes(sending.pengirim)
+    const specperm = middlewareOpts.specialpermission
     if(specperm != null) {
         sending.isSpecial = specperm.includes(sending.pengirim)
     }
