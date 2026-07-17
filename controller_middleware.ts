@@ -5,7 +5,10 @@ import { getGroupMetadata } from "./util/group";
 import { GroupParticipant, MessageUpsertType, WASocket, proto } from "@whiskeysockets/baileys";
 import { msg_type } from "./util/msgType";
 import { chatAnonim } from "./util/anonim";
-
+export type WebMessageInfoWithKey =
+    proto.IWebMessageInfo & {
+        key: NonNullable<proto.IWebMessageInfo["key"]>;
+    };
 export interface messageType {
     key: string,
     fromMe: boolean,
@@ -16,7 +19,7 @@ export interface messageType {
     pengirim_nama: string,
     anggota: Array<GroupParticipant>,
     isAdmin: boolean,
-    messageInstance: proto.IWebMessageInfo,
+    messageInstance: WebMessageInfoWithKey,
     kontak: string[],
     quoted?: proto.IMessage | null | undefined,
     message_type: msg_type,
@@ -32,8 +35,6 @@ export default async function MiddlewareController(message: {
 
 
     const isGroup = message.messages?.[0].key?.participant != null
-
-
 
     const pesan = message.messages[0].message?.conversation ||
         message.messages[0].message?.ephemeralMessage?.message?.extendedTextMessage?.text
@@ -52,17 +53,22 @@ export default async function MiddlewareController(message: {
     if (typeof mentions == "string") {
         mentions = [mentions]
     }
+
+    if (message.messages[0].key == null) {
+        return;
+    }
+
     const sending: messageType = {
-        key: message.messages[0].key.id as string,
-        fromMe: message.messages[0].key.fromMe as boolean,
-        room: message.messages[0].key.remoteJid as string,
+        key: message.messages[0].key?.id as string,
+        fromMe: message.messages[0].key?.fromMe as boolean,
+        room: message.messages[0].key?.remoteJid as string,
         pesan: pesan?.split(/\n/).map(el => "\n"+el).join(" ").split(" ").slice(1)  || [],
-        pengirim: isGroup ? message.messages[0].key.participant as string : message.messages[0].key.remoteJid as string,
+        pengirim: isGroup ? message.messages[0].key?.participant as string : message.messages[0].key?.remoteJid as string,
         isGroup: isGroup,
         anggota: [],
         pengirim_nama: message.messages[0].pushName as string,
         isAdmin: false,
-        messageInstance: message.messages[0],
+        messageInstance: message.messages[0] as WebMessageInfoWithKey,
         quoted,
         kontak: [],
         message_type: msgType as unknown as msg_type,
@@ -70,7 +76,6 @@ export default async function MiddlewareController(message: {
         isOwner: false,
         isSpecial : false
     }
-    console.log(pesan)
 
     if (getOptions().restrict != null) {
         const rest = getOptions().restrict as {
@@ -85,6 +90,9 @@ export default async function MiddlewareController(message: {
                 } else {
                     setTimeout(async () => {
                         try {
+                            if (sending.messageInstance?.key == null) {
+                                return
+                            }
                             await socket.sendMessage(sending.room, { delete: sending.messageInstance.key })
                         } catch (err) {
 
@@ -100,7 +108,7 @@ export default async function MiddlewareController(message: {
 
     if (!(pesan?.at(0) == getOptions().prefix as string)) {
         if (!isGroup) {
-            await chatAnonim(message.messages[0].key.remoteJid || "", pesan || "")
+            await chatAnonim(message.messages[0].key?.remoteJid || "", pesan || "")
         }
         return
     }

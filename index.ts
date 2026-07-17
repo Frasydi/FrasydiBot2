@@ -1,38 +1,57 @@
 require("fix-esm").register();
+import Redis from 'ioredis'
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import dotenv from "dotenv"
 import * as fs from "fs"
-import makeWASocket, { Browsers, DisconnectReason, makeInMemoryStore, proto, useMultiFileAuthState } from '@whiskeysockets/baileys';
+import makeWASocket, { AuthenticationState, Browsers, DisconnectReason, proto, useMultiFileAuthState, UserFacingSocketConfig } from '@whiskeysockets/baileys';
 import * as path from "path"
+import NodeCache from 'node-cache'
+import { RedisStore } from './util/redis-store';
+import { JsonStore } from './util/json-store';
+import { useRedisAuthState } from './util/auth-state';
 dotenv.config()
 
+const isProd = process.env.DEV == 'true'
 
-const store = makeInMemoryStore({ 
+// const store = makeInMemoryStore({ 
    
-})
+// })
 
-store.readFromFile('./baileys_store.json')
+// store.readFromFile('./baileys_store.json')
 
-setInterval(() => {
-    store.writeToFile('./baileys_store.json')
-}, 10_000)
+// setInterval(() => {
+//     store.writeToFile('./baileys_store.json')
+// }, 10_000)
 
 if(!fs.existsSync("media")) {
     fs.mkdirSync("media")
 }
 
-async function connectToWhatsApp () {
-    const { state, saveCreds } = await useMultiFileAuthState('auth_info_baileys')
+export const redis = new Redis()
 
-    const sock = makeWASocket({
+const redisStore = new RedisStore(redis);
+const jsonStore = new JsonStore();
+
+async function connectToWhatsApp () {
+    let state: AuthenticationState;
+    let saveCreds: () => Promise<void>;
+
+    if (!isProd) {
+        ({ state, saveCreds } = await useMultiFileAuthState("auth_info_baileys"));
+    } else {
+        ({ state, saveCreds } = await useRedisAuthState(
+            redisStore,
+            jsonStore,
+            "main"
+        ));
+    }
+    
+    const config : UserFacingSocketConfig = {
         printQRInTerminal: true,
         browser: Browsers.macOS('Desktop'),
         auth : state,
-        getMessage : async(key) => {
-            const message = await store.loadMessage(key.remoteJid as string, key.id as string)
-            return message as proto.IMessage | undefined
-        },
+        cachedGroupMetadata: async (jid) => groupCache.get(jid),
         patchMessageBeforeSending: (message) => {
             const requiresPatch = !!(
                 message.buttonsMessage ||
@@ -55,11 +74,14 @@ async function connectToWhatsApp () {
 
             return message;
         },
-    })
+    }
+
+    const groupCache = new NodeCache()
+    const sock = makeWASocket(config)
 
     if(sock == null) return
 
-    store.bind(sock.ev)
+    // store.bind(sock.ev)
     
     
    
@@ -84,7 +106,6 @@ async function connectToWhatsApp () {
     sock.ev.on("group-participants.update", async(grup) => {
         console.log(grup)
         if(grup.action == "add") {
-
             const opt =  JSON.parse(fs.readFileSync(path.resolve(__dirname, "./option.json"), "utf-8").toString())
             console.log(opt)
             if(opt.newmem == null) return
@@ -104,7 +125,7 @@ async function connectToWhatsApp () {
             })
         } else if(grup.action == "remove") {
             const ppUrl = await sock.profilePictureUrl(grup.author, "image")
-            sock?.sendMessage(grup.id, {text:"@"+grup.author.split("@").at(0) + " Meninggalkan Grub", mentions: grup.participants})
+            sock?.sendMessage(grup.id, {text:"@"+grup.author.split("@")[0] + " Meninggalkan Grub"})
         }
     })
     sock.ev.on('messages.upsert', (m) => {

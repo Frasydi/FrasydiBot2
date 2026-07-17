@@ -1,7 +1,6 @@
 import { WASocket } from '@whiskeysockets/baileys';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
-import { IFnSearchOptions, app } from 'google-play-scraper';
 import goplay from "google-play-scraper"
 import * as fs from "fs"
 export const types = /goplay/i

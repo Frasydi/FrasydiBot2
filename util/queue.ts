@@ -1,9 +1,11 @@
 import Queue from "bull"
 import * as fs from "fs"
+import { env } from "process";
 const myQueue = new Queue('options', {
     redis: {
-        port: 6379,
-        host: '127.0.0.1'
+        port: Number(env.REDIS_PORT) || 0,
+        host: env.REDIS_HOST || "",
+        password: env.REDIS_PASSWORD || ""
     }
 });
 

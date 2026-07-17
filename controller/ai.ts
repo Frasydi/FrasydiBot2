@@ -1,7 +1,7 @@
 import axios, { AxiosError } from 'axios';
 import { messageType } from '../controller_middleware';
 import { getOptions } from '../util/option';
-import { WASocket, downloadMediaMessage } from '@whiskeysockets/baileys';
+import { WASocket, downloadMediaMessage, proto } from '@whiskeysockets/baileys';
 import { GoogleGenerativeAI, HarmBlockThreshold, HarmCategory, Part } from '@google/generative-ai';
 import convertQuoted2MsgInfo from '../util/convertQuoted2MsgInfo';
 export const types = /^ai$/i
