@@ -86,6 +86,14 @@ const dbConfig: { [tableName: string]: TableConfig } = {
     },
     jsType: "json-map",
     version: 1
+  },
+  run_history: {
+    columns: {
+      room_month: "TEXT PRIMARY KEY",
+      data: "TEXT"
+    },
+    jsType: "json-map",
+    version: 1
   }
 };
 

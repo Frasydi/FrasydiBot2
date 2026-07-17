@@ -93,6 +93,10 @@ export function getOptions(requestedTables?: string | string[]) {
       }
     }
 
+    if (optionsObj.prefix === undefined || optionsObj.prefix === null) {
+      optionsObj.prefix = "/";
+    }
+
     return optionsObj
   } catch (err) {
     console.error("Error reading options from database tables:", err)
