@@ -9,7 +9,7 @@
     "@google/generative-ai": "^0.8.0",
     "@types/ffmpeg": "^1.0.7",
     "@types/html-to-text": "^9.0.0",
-    "@whiskeysockets/baileys": "^7.0.0-rc13",
+    "@whiskeysockets/baileys": "^7.0.0-rc14",
     "axios": "^1.3.4",
     "better-sqlite3": "^12.11.1",
     "bull": "^4.16.3",

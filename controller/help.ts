@@ -31,7 +31,7 @@ export default async function Help(socket: WASocket, {
     }).join("\n")
     await socket.sendMessage(room, {
         text : `
-        *Ini adalah BOT FRASYDI*
+        *Ini adalah BOT ANTEK ANTEK ASING*
         \n${text}`
     })
 

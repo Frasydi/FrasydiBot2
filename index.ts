@@ -1,11 +1,9 @@
 require("fix-esm").register();
 import 'dotenv/config'
-import Redis from 'ioredis'
 import { Boom } from '@hapi/boom'
 import MiddlewareController from "./controller_middleware"
 import * as fs from "fs"
 import makeWASocket, { AuthenticationState, Browsers, DisconnectReason, proto, useMultiFileAuthState, UserFacingSocketConfig } from '@whiskeysockets/baileys';
-import * as path from "path"
 import NodeCache from 'node-cache'
 import { RedisStore } from './util/redis-store';
 import { JsonStore } from './util/json-store';
@@ -13,6 +11,7 @@ import { useRedisAuthState } from './util/auth-state';
 import { getOptions } from './util/option';
 // @ts-ignore
 import qrcode from 'qrcode-terminal';
+import { redis } from './util/redis';
 
 const isProd = process.env.DEV == 'false'
 
@@ -30,12 +29,7 @@ if(!fs.existsSync("media")) {
     fs.mkdirSync("media")
 }
 
-export const redis = new Redis({
-    host: process.env.REDIS_HOST || '127.0.0.1',
-    port: Number(process.env.REDIS_PORT) || 6379,
-    password: process.env.REDIS_PASSWORD || undefined,
-    db: Number(process.env.REDIS_DB) || 0
-})
+
 
 const redisStore = new RedisStore(redis);
 const jsonStore = new JsonStore();
@@ -88,8 +82,6 @@ async function connectToWhatsApp () {
     if(sock == null) return
 
     // store.bind(sock.ev)
-    
-    
    
     sock.ev.on("creds.update", saveCreds)
     sock.ev.on('connection.update', (update) => {
@@ -111,14 +103,11 @@ async function connectToWhatsApp () {
     })
     
     sock.ev.on("messages.delete",(m) => {
-        console.log("Kena Hapus")
-        console.log(m)
+        //
     })
     sock.ev.on("group-participants.update", async(grup) => {
-        console.log(grup)
         if(grup.action == "add") {
             const opt = getOptions()
-            console.log(opt)
             if(opt.newmem == null) return
             const getPesan = opt.newmem[grup.id]
             if(getPesan == null) return
@@ -135,7 +124,7 @@ async function connectToWhatsApp () {
                 text : getPesan.message
             })
         } else if(grup.action == "remove") {
-            const ppUrl = await sock.profilePictureUrl(grup.author, "image")
+            // const ppUrl = await sock.profilePictureUrl(grup.author, "image")
             sock?.sendMessage(grup.id, {text:"@"+grup.author.split("@")[0] + " Meninggalkan Grub"})
         }
     })

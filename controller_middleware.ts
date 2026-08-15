@@ -60,7 +60,7 @@ export default async function MiddlewareController(message: {
         return;
     }
 
-    const sending: messageType = {
+    const send: messageType = {
         key: message.messages[0].key?.id as string,
         fromMe: message.messages[0].key?.fromMe as boolean,
         room: message.messages[0].key?.remoteJid as string,
@@ -85,19 +85,19 @@ export default async function MiddlewareController(message: {
         const rest = middlewareOpts.restrict as {
             [key: string]: string
         }
-        if (rest[sending.room] != null) {
+        if (rest[send.room] != null) {
 
-            if (rest[sending.room].includes(sending.pengirim)) {
-                if ((["imageMessage", "stickerMessage", "videoMessage"] as msg_type[]).includes(sending.message_type)) {
-                    await socket.sendMessage(sending.room, { delete: sending.messageInstance.key })
+            if (rest[send.room].includes(send.pengirim)) {
+                if ((["imageMessage", "stickerMessage", "videoMessage"] as msg_type[]).includes(send.message_type)) {
+                    await socket.sendMessage(send.room, { delete: send.messageInstance.key })
 
                 } else {
                     setTimeout(async () => {
                         try {
-                            if (sending.messageInstance?.key == null) {
+                            if (send.messageInstance?.key == null) {
                                 return
                             }
-                            await socket.sendMessage(sending.room, { delete: sending.messageInstance.key })
+                            await socket.sendMessage(send.room, { delete: send.messageInstance.key })
                         } catch (err) {
 
                         }
@@ -119,8 +119,8 @@ export default async function MiddlewareController(message: {
 
 
     if (middlewareOpts.ban != null) {
-        if ((middlewareOpts.ban as string[]).includes(sending.pengirim)) {
-            socket.sendMessage(sending.room, {
+        if ((middlewareOpts.ban as string[]).includes(send.pengirim)) {
+            socket.sendMessage(send.room, {
                 text: "Maaf anda sudah diblacklist untuk menggunakan bot ini"
             })
             return
@@ -128,32 +128,29 @@ export default async function MiddlewareController(message: {
     }
 
     if (quoted != null) {
-        sending.quoted_type = Object.keys((quoted) as object)[0] as msg_type
+        send.quoted_type = Object.keys((quoted) as object)[0] as msg_type
     }
     if (quoted?.contactMessage?.vcard != null) {
         const contact: string[] = quoted?.contactMessage?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
-        console.log(contact)
-        sending.kontak?.push(contact?.[0])
+        send.kontak?.push(contact?.[0])
     }
     if (quoted?.contactsArrayMessage != null) {
         quoted?.contactsArrayMessage.contacts?.forEach(el => {
-            console.log(el.vcard)
             const contact: string[] = el?.vcard?.match(/(?<=waid=)[0-9]+/gi) as string[]
-            console.log(contact)
             if (contact == null) return
-            sending.kontak?.push(contact?.[0])
+            send.kontak?.push(contact?.[0])
         })
     }
     if (isGroup) {
-        sending.anggota = await getGroupMetadata(sending.room as string, socket)
-        sending.isAdmin = ["admin", "superadmin"].includes(sending.anggota.filter(el => el.id == sending.pengirim)[0]?.admin || "")
+        send.anggota = await getGroupMetadata(send.room as string, socket)
+        send.isAdmin = ["admin", "superadmin"].includes(send.anggota.filter(el => el.id == send.pengirim)[0]?.admin || "")
     }
     
 
-    sending.isOwner = middlewareOpts.owner.includes(sending.pengirim)
+    send.isOwner = middlewareOpts.owner.includes(send.pengirim)
     const specperm = middlewareOpts.specialpermission
     if(specperm != null) {
-        sending.isSpecial = specperm.includes(sending.pengirim)
+        send.isSpecial = specperm.includes(send.pengirim)
     }
 
 
@@ -161,11 +158,9 @@ export default async function MiddlewareController(message: {
         console.log(el.types)
         if (!el.types.test(pesan.split(" ")[0].split("/").at(-1) as string)) continue;
 
-
-        el.default(socket, sending).catch((err: any) => {
+        el.default(socket, send).catch((err: any) => {
             console.log(err)
-
-            socket.sendMessage(sending.room, { text: typeof err == "string" ? err : "Ada Error" })
+            socket.sendMessage(send.room, { text: typeof err == "string" ? err : "Ada Error" })
         })
         break
 
